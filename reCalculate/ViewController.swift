@@ -13,6 +13,18 @@ class ViewController: UIViewController {
     @IBOutlet weak var liquid: UIButton!
     @IBOutlet weak var height: UIButton!
     @IBOutlet weak var weight: UIButton!
+    //This function will be called when the weight button gets pressed.
+    @IBAction func pressedWeight(_ sender: Any) {
+        
+    }
+    //This function will be called when the height button gets pressed.
+    @IBAction func pressedHeight(_ sender: Any) {
+        
+    }
+    //This function will be called when the liquid button gets pressed.
+    @IBAction func pressedLiquid(_ sender: Any) {
+        
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         //Setting upp each button to look like a rounded button with an gray outline.

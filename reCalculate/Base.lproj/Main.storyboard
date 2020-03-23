@@ -45,7 +45,7 @@ reCalculate?</string>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="eEe-ck-qzA" userLabel="buttonStack">
                                         <rect key="frame" x="0.0" y="70" width="334" height="100"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lag-WY-4ji">
+                                            <button opaque="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lag-WY-4ji" userLabel="weight">
                                                 <rect key="frame" x="0.0" y="25" width="104.5" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="SZ9-hN-jy4"/>
@@ -54,8 +54,11 @@ reCalculate?</string>
                                                 <state key="normal" title="Weight">
                                                     <color key="titleColor" red="0.92143100499999997" green="0.92145264149999995" blue="0.92144101860000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="pressedWeight:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Wun-ky-Hj4"/>
+                                                </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VB1-o6-2ov">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VB1-o6-2ov" userLabel="height">
                                                 <rect key="frame" x="114.5" y="25" width="105" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="Vwv-oL-sJL"/>
@@ -64,8 +67,11 @@ reCalculate?</string>
                                                 <state key="normal" title="Height">
                                                     <color key="titleColor" red="0.92143100499999997" green="0.92145264149999995" blue="0.92144101860000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="pressedHeight:" destination="BYZ-38-t0r" eventType="touchUpInside" id="JXM-Dy-VGC"/>
+                                                </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hpK-E6-a1W">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hpK-E6-a1W" userLabel="liquid">
                                                 <rect key="frame" x="229.5" y="25" width="104.5" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="mGS-af-Sj5"/>
@@ -74,6 +80,9 @@ reCalculate?</string>
                                                 <state key="normal" title="Liquid">
                                                     <color key="titleColor" red="0.92143100499999997" green="0.92145264149999995" blue="0.92144101860000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="pressedLiquid:" destination="BYZ-38-t0r" eventType="touchUpInside" id="4db-AC-tGP"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <constraints>
