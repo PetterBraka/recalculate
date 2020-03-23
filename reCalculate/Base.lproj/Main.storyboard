@@ -78,7 +78,6 @@ reCalculate?</string>
                                         </subviews>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="100" id="MBO-Jf-E3G"/>
-                                            <constraint firstAttribute="width" constant="300" id="ugb-o9-kCk"/>
                                         </constraints>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="joh-q9-BS4">
