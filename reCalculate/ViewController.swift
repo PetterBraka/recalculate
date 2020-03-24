@@ -88,6 +88,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     @objc func keyboardWillChange(notification: Notification){
         //gets the hight of the keyboard and moves the UI upp so that you can se whats happening and notting is coverd by the keyboard.
+        
         guard let kbHight = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.height else {
             return
         }
@@ -96,6 +97,16 @@ class ViewController: UIViewController, UITextFieldDelegate {
         } else {
             view.frame.origin.y = 0
         }
+    }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    deinit {
+        //Stopps listening for the keyboard to changes.
+        NotificationCenter.default.removeObserver(UIResponder.keyboardWillShowNotification)
+        NotificationCenter.default.removeObserver(UIResponder.keyboardWillHideNotification)
+        NotificationCenter.default.removeObserver(UIResponder.keyboardWillChangeFrameNotification)
     }
     
 }
