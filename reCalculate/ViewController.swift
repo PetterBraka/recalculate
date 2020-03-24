@@ -31,23 +31,36 @@ class ViewController: UIViewController, UITextFieldDelegate {
         let units = ["l", "ml", "fl. oz", "pt"]
         createInfoView(units)
     }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         //This method cleans all the textFields when someone clicks on one of them.
-        for subview in infoStack.subviews{
-            for view in subview.subviews {
+        for stack in infoStack.subviews{
+            for view in stack.subviews {
                 if view is UITextField, let input = view as? UITextField {
-                    input.text?.removeAll()
+                    input.text = ""
+                }
+            }
+        }
+        return true
+    }
+    
+    func handleInput(_ input: UITextField) {
+        for stack in infoStack.subviews {
+            for view in stack.subviews {
+                if view is UITextField, let textField = view as? UITextField{
+                    weightMath(input, textField)
                 }
             }
         }
     }
-    
-    func handleInput(textField: UITextField) {
-        guard let inputValue = Double(textField.text!)else {
-            return
+    func toFloat(_ value: String) -> Float{
+        let formatter = NumberFormatter()
+        formatter.locale = Locale.current // USA: Locale(identifier: "en_US")
+        formatter.numberStyle = .decimal
+        let number = formatter.number(from: value)
+        if number == nil {
+            return 0
         }
-        print("\(textField.tag) \(inputValue)")
+        return number as! Float
     }
     
     fileprivate func createInfoView(_ units: [String]) {
@@ -58,12 +71,13 @@ class ViewController: UIViewController, UITextFieldDelegate {
         for unit in units {
             let infoCard = UIStackView()
             infoCard.axis = .horizontal
-            infoCard.alignment = .fill
+            infoCard.alignment = .trailing
             infoCard.distribution = .fill
             
             let userInput = UITextField(frame : CGRect(x: 0, y: 0, width: 200, height: 40))
-            userInput.attributedPlaceholder = NSAttributedString(string: "0000.00", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+            userInput.attributedPlaceholder = NSAttributedString(string: "0.000", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
             userInput.textColor = UIColor.white
+            userInput.textAlignment = .right
             userInput.tag = units.firstIndex(of: unit)!
             userInput.font = UIFont(name: "American Typewriter", size: 20)
             userInput.borderStyle = UITextField.BorderStyle.roundedRect
@@ -73,11 +87,12 @@ class ViewController: UIViewController, UITextFieldDelegate {
             userInput.delegate = self
             infoCard.addArrangedSubview(userInput)
             
-            let lable = UILabel(frame: CGRect.zero)
-            lable.text = " " + unit
-            lable.textColor = .white
-            lable.font = UIFont(name: "American Typewriter", size: 20)
-            infoCard.addArrangedSubview(lable)
+            let label = UILabel(frame: CGRect.zero)
+            label.text = " " + unit
+            label.textColor = .white
+            label.font = UIFont(name: "American Typewriter", size: 20)
+            label.addConstraint(NSLayoutConstraint(item: label, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 60))
+            infoCard.addArrangedSubview(label)
             infoStack.addArrangedSubview(infoCard)
         }
     }
@@ -117,9 +132,10 @@ class ViewController: UIViewController, UITextFieldDelegate {
             view.frame.origin.y = 0
         }
     }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        handleInput(textField: textField)
+        handleInput(textField)
         return true
     }
     deinit {
@@ -127,6 +143,68 @@ class ViewController: UIViewController, UITextFieldDelegate {
         NotificationCenter.default.removeObserver(UIResponder.keyboardWillShowNotification)
         NotificationCenter.default.removeObserver(UIResponder.keyboardWillHideNotification)
         NotificationCenter.default.removeObserver(UIResponder.keyboardWillChangeFrameNotification)
+    }
+    
+    
+    fileprivate func weightMath(_ input: UITextField, _ textField: UITextField) {
+        //The math for doing weight calculations. This will also round up the answer to the third decimal.
+        switch input.tag {
+            /*
+             case 0 is for when the user want to calculate from kilogram
+             case 1 is for when the user want to calculate from ounces
+             case 2 is for when the user want to calculate from pounds
+             */
+        case 0:
+            switch textField.tag {
+                /*
+                case 0 is for when the user want to calculate to kilogram
+                case 1 is for when the user want to calculate to ounces
+                case 2 is for when the user want to calculate to pounds
+                */
+            case 0:
+                textField.text = String(format: "%.3f", toFloat(input.text!) * 1)
+            case 1:
+                textField.text = String(format: "%.3f", toFloat(input.text!) * 35.274)
+            case 2:
+                textField.text = String(format: "%.3f", toFloat(input.text!) * 2.205)
+            default:
+                break
+            }
+        case 1:
+            switch textField.tag {
+                /*
+                case 0 is for when the user want to calculate to kilogram
+                case 1 is for when the user want to calculate to ounces
+                case 2 is for when the user want to calculate to pounds
+                */
+            case 0:
+                textField.text = String(format: "%.3f", toFloat(input.text!) * 0.028)
+            case 1:
+                textField.text = String(format: "%.3f", toFloat(input.text!) * 1)
+            case 2:
+                textField.text = String(format: "%.3f", toFloat(input.text!) * 0.063)
+            default:
+                break
+            }
+        case 2:
+            switch textField.tag {
+                /*
+                case 0 is for when the user want to calculate to kilogram
+                case 1 is for when the user want to calculate to ounces
+                case 2 is for when the user want to calculate to pounds
+                */
+            case 0:
+                textField.text = String(format: "%.3f", toFloat(input.text!) * 0.454)
+            case 1:
+                textField.text = String(format: "%.3f", toFloat(input.text!) * 16)
+            case 2:
+                textField.text = String(format: "%.3f", toFloat(input.text!) * 1)
+            default:
+                break
+            }
+        default:
+            break
+        }
     }
     
 }

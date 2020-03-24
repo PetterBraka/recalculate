@@ -91,7 +91,7 @@ reCalculate?</string>
                                     </stackView>
                                 </subviews>
                             </stackView>
-                            <stackView opaque="NO" contentMode="scaleAspectFill" axis="vertical" distribution="fillEqually" alignment="top" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="d13-tl-KdX" userLabel="InfoStack">
+                            <stackView opaque="NO" contentMode="scaleAspectFill" axis="vertical" distribution="fillEqually" alignment="bottom" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="d13-tl-KdX" userLabel="InfoStack">
                                 <rect key="frame" x="20" y="504" width="374" height="338"/>
                             </stackView>
                         </subviews>
