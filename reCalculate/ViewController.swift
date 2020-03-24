@@ -32,6 +32,24 @@ class ViewController: UIViewController, UITextFieldDelegate {
         createInfoView(units)
     }
     
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        //This method cleans all the textFields when someone clicks on one of them.
+        for subview in infoStack.subviews{
+            for view in subview.subviews {
+                if view is UITextField, let input = view as? UITextField {
+                    input.text?.removeAll()
+                }
+            }
+        }
+    }
+    
+    func handleInput(textField: UITextField) {
+        guard let inputValue = Double(textField.text!)else {
+            return
+        }
+        print("\(textField.tag) \(inputValue)")
+    }
+    
     fileprivate func createInfoView(_ units: [String]) {
         //This method will take a string array and make an input box for the user and show the unit its for beside it.
         for view in infoStack.subviews {
@@ -46,6 +64,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
             let userInput = UITextField(frame : CGRect(x: 0, y: 0, width: 200, height: 40))
             userInput.attributedPlaceholder = NSAttributedString(string: "0000.00", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
             userInput.textColor = UIColor.white
+            userInput.tag = units.firstIndex(of: unit)!
             userInput.font = UIFont(name: "American Typewriter", size: 20)
             userInput.borderStyle = UITextField.BorderStyle.roundedRect
             userInput.keyboardType = UIKeyboardType.numbersAndPunctuation
@@ -100,6 +119,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     }
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
+        handleInput(textField: textField)
         return true
     }
     deinit {
