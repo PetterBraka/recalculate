@@ -78,6 +78,25 @@ class ViewController: UIViewController, UITextFieldDelegate {
         weight.layer.cornerRadius = 20
         weight.layer.borderWidth = 3
         weight.layer.borderColor = UIColor.darkGray.cgColor
+
+        //Starts to listen for the keyboard to changes.
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        }
+
+    
+    @objc func keyboardWillChange(notification: Notification){
+        //gets the hight of the keyboard and moves the UI upp so that you can se whats happening and notting is coverd by the keyboard.
+        guard let kbHight = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.height else {
+            return
+        }
+        if notification.name == UIResponder.keyboardWillShowNotification{
+            view.frame.origin.y = -kbHight
+        } else {
+            view.frame.origin.y = 0
+        }
     }
+    
 }
 
