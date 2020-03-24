@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
-    <device id="retina6_1" orientation="portrait" appearance="dark"/>
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Item-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="reCalculate" customModuleProvider="target" sceneMemberID="viewController">
@@ -28,8 +28,8 @@
                                 <color key="textColor" red="0.92143100499999997" green="0.92145264149999995" blue="0.92144101860000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <stackView opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="71O-8y-P7c">
-                                <rect key="frame" x="40" y="314" width="334" height="528"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="71O-8y-P7c" userLabel="menuStack">
+                                <rect key="frame" x="40" y="314" width="334" height="170"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k64-5w-cIa">
                                         <rect key="frame" x="0.0" y="0.0" width="334" height="50"/>
@@ -64,7 +64,7 @@ reCalculate?</string>
                                                     <constraint firstAttribute="height" constant="50" id="Vwv-oL-sJL"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" name="AmericanTypewriter-Bold" family="American Typewriter" pointSize="17"/>
-                                                <state key="normal" title="Height">
+                                                <state key="normal" title="Length">
                                                     <color key="titleColor" red="0.92143100499999997" green="0.92145264149999995" blue="0.92144101860000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
                                                 <connections>
@@ -89,18 +89,21 @@ reCalculate?</string>
                                             <constraint firstAttribute="height" constant="100" id="MBO-Jf-E3G"/>
                                         </constraints>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="joh-q9-BS4">
-                                        <rect key="frame" x="0.0" y="190" width="334" height="338"/>
-                                    </stackView>
                                 </subviews>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="scaleAspectFill" axis="vertical" distribution="fillEqually" alignment="top" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="d13-tl-KdX" userLabel="InfoStack">
+                                <rect key="frame" x="20" y="504" width="374" height="338"/>
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="gD9-cj-Brp" secondAttribute="bottom" id="01V-bw-GJk"/>
                             <constraint firstItem="71O-8y-P7c" firstAttribute="top" secondItem="VXo-cP-2Wy" secondAttribute="bottom" constant="180" id="01Y-P1-0Uk"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="71O-8y-P7c" secondAttribute="bottom" constant="20" id="EdL-lD-yVn"/>
+                            <constraint firstItem="d13-tl-KdX" firstAttribute="top" secondItem="71O-8y-P7c" secondAttribute="bottom" constant="20" id="16b-Eh-SuO"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="d13-tl-KdX" secondAttribute="trailing" constant="20" id="9VK-hh-C7d"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="d13-tl-KdX" secondAttribute="bottom" constant="20" id="C0D-7V-BJB"/>
                             <constraint firstItem="71O-8y-P7c" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="20" id="W1v-EG-fQb"/>
+                            <constraint firstItem="d13-tl-KdX" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="cGO-xi-S8G"/>
                             <constraint firstAttribute="trailing" secondItem="gD9-cj-Brp" secondAttribute="trailing" id="fRv-KT-gW6"/>
                             <constraint firstItem="VXo-cP-2Wy" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="flA-XZ-11y"/>
                             <constraint firstItem="gD9-cj-Brp" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="h1C-7C-B3P"/>
@@ -110,15 +113,17 @@ reCalculate?</string>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Item" id="kH5-1A-9HS"/>
                     <connections>
-                        <outlet property="height" destination="VB1-o6-2ov" id="Sdu-nG-InP"/>
+                        <outlet property="infoStack" destination="d13-tl-KdX" id="dYf-Py-Chc"/>
+                        <outlet property="length" destination="VB1-o6-2ov" id="Sdu-nG-InP"/>
                         <outlet property="liquid" destination="hpK-E6-a1W" id="mRe-RP-4F1"/>
                         <outlet property="weight" destination="lag-WY-4ji" id="mvc-Y3-1fm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="137.68115942028987" y="117.85714285714285"/>
+            <point key="canvasLocation" x="1047.8260869565217" y="117.85714285714285"/>
         </scene>
     </scenes>
 </document>
