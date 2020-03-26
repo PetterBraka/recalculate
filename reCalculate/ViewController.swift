@@ -19,7 +19,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     //This function will be called when the weight button gets pressed.
     
     @IBAction func pressedWeight(_ sender: Any) {
-        let units = ["Kg", "oz", "lb"]
+        let units = ["Kg", "st", "lb", "oz"]
         buttonPressed = "weight"
         createInfoView(units)
     }
@@ -51,20 +51,12 @@ class ViewController: UIViewController, UITextFieldDelegate {
         for stack in infoStack.subviews {
             for view in stack.subviews {
                 if view is UITextField, let textField = view as? UITextField{
-                    switch buttonPressed {
-                    case "weight":
-                        weightMath(input, textField)
-                    case "length":
-                        lengthMath(input, textField)
-                    case "liquid":
-                        liquidMath(input, textField)
-                    default:
-                        break
-                    }
+                    updateUI(input, textField)
                 }
             }
         }
     }
+    
     func toFloat(_ value: String) -> Float{
         let formatter = NumberFormatter()
         formatter.locale = Locale.current // USA: Locale(identifier: "en_US")
@@ -158,280 +150,34 @@ class ViewController: UIViewController, UITextFieldDelegate {
         NotificationCenter.default.removeObserver(UIResponder.keyboardWillChangeFrameNotification)
     }
     
-    
-    func weightMath(_ input: UITextField, _ textField: UITextField) {
-        //The math for doing weight calculations. This will also round up the answer to the third decimal.
-        switch input.tag {
-            /*
-             case 0 is for when the user want to calculate from kilogram
-             case 1 is for when the user want to calculate from ounces
-             case 2 is for when the user want to calculate from pounds
-             */
-        case 0:
-            switch textField.tag {
-                /*
-                case 0 is for when the user want to calculate to kilogram
-                case 1 is for when the user want to calculate to ounces
-                case 2 is for when the user want to calculate to pounds
-                */
-            case 0:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 1)
-            case 1:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 35.274)
-            case 2:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 2.205)
-            default:
-                break
-            }
-        case 1:
-            switch textField.tag {
-                /*
-                case 0 is for when the user want to calculate to kilogram
-                case 1 is for when the user want to calculate to ounces
-                case 2 is for when the user want to calculate to pounds
-                */
-            case 0:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 0.028)
-            case 1:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 1)
-            case 2:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 0.063)
-            default:
-                break
-            }
-        case 2:
-            switch textField.tag {
-                /*
-                case 0 is for when the user want to calculate to kilogram
-                case 1 is for when the user want to calculate to ounces
-                case 2 is for when the user want to calculate to pounds
-                */
-            case 0:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 0.454)
-            case 1:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 16)
-            case 2:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 1)
-            default:
-                break
-            }
+    func updateUI(_ input: UITextField, _ textField: UITextField) {
+        guard let inputString = input.text, let inputValue = Double(inputString) else {
+            return
+        }
+        let convertedValue = convert(mass: inputValue, inputUnitIndex: input.tag, outputUnitIndex: textField.tag)
+        textField.text = String(format: "%.3f", convertedValue)
+    }
+    private func convert(mass: Double, inputUnitIndex: Int, outputUnitIndex: Int) -> Double {
+        //The mass unit will be picked by the index of the textfield were the user edited
+        var convertedValue = Double()
+        switch buttonPressed {
+        case "weight":
+            let unitLookupTable = [ UnitMass.kilograms, UnitMass.stones, UnitMass.pounds, UnitMass.ounces ]
+            let mass = Measurement(value: mass, unit: unitLookupTable[inputUnitIndex])
+            convertedValue = mass.converted(to: unitLookupTable[outputUnitIndex]).value
+        case "length":
+            let unitLookupTable = [ UnitLength.meters, UnitLength.inches, UnitLength.feet, UnitLength.yards, UnitLength.miles ]
+            let length = Measurement(value: mass, unit: unitLookupTable[inputUnitIndex])
+            convertedValue = length.converted(to: unitLookupTable[outputUnitIndex]).value
+        case "liquid":
+            let unitLookupTable = [ UnitVolume.liters, UnitVolume.milliliters, UnitVolume.fluidOunces, UnitVolume.pints ]
+            let liquid = Measurement(value: mass, unit: unitLookupTable[inputUnitIndex])
+            convertedValue = liquid.converted(to: unitLookupTable[outputUnitIndex]).value
         default:
             break
         }
+        return convertedValue
     }
     
-    func lengthMath(_ input: UITextField, _ textField: UITextField) {
-        //The math for doing length calculations. This will also round up the answer to the third decimal.
-        switch input.tag {
-            /*
-             case 0 is for when the user want to calculate from meters
-             case 1 is for when the user want to calculate from inchest
-             case 2 is for when the user want to calculate from feets
-             case 3 is for when the user want to calculate from yards
-             case 4 is for when the user want to calculate from miles
-             */
-        case 0:
-            switch textField.tag {
-                /*
-                case 0 is for when the user want to calculate to meters
-                case 1 is for when the user want to calculate to inchest
-                case 2 is for when the user want to calculate to feets
-                case 3 is for when the user want to calculate to yards
-                case 4 is for when the user want to calculate to miles
-                */
-            case 0:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 1)
-            case 1:
-                textField.text = String(format: "%.3f", toFloat(input.text!) / 39.37)
-            case 2:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 3.281)
-            case 3:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 1.094)
-            case 4:
-                textField.text = String(format: "%.3f", toFloat(input.text!) / 1609)
-            default:
-                break
-            }
-        case 1:
-            switch textField.tag {
-                /*
-                case 0 is for when the user want to calculate to meters
-                case 1 is for when the user want to calculate to inchest
-                case 2 is for when the user want to calculate to feets
-                case 3 is for when the user want to calculate to yards
-                case 4 is for when the user want to calculate to miles
-                */
-            case 0:
-                textField.text = String(format: "%.3f", toFloat(input.text!) / 39.37)
-            case 1:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 1)
-            case 2:
-                textField.text = String(format: "%.3f", toFloat(input.text!) / 12)
-            case 3:
-                textField.text = String(format: "%.3f", toFloat(input.text!) / 36)
-            case 4:
-                textField.text = String(format: "%.3f", toFloat(input.text!) / 63360)
-            default:
-                break
-            }
-        case 2:
-            switch textField.tag {
-                /*
-                case 0 is for when the user want to calculate to meters
-                case 1 is for when the user want to calculate to inchest
-                case 2 is for when the user want to calculate to feets
-                case 3 is for when the user want to calculate to yards
-                case 4 is for when the user want to calculate to miles
-                */
-            case 0:
-                textField.text = String(format: "%.3f", toFloat(input.text!) / 3.281)
-            case 1:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 12)
-            case 2:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 1)
-            case 3:
-                textField.text = String(format: "%.3f", toFloat(input.text!) / 3)
-            case 4:
-                textField.text = String(format: "%.3f", toFloat(input.text!) / 5280)
-            default:
-                break
-            }
-        case 3:
-            switch textField.tag {
-                /*
-                case 0 is for when the user want to calculate to meters
-                case 1 is for when the user want to calculate to inchest
-                case 2 is for when the user want to calculate to feets
-                case 3 is for when the user want to calculate to yards
-                case 4 is for when the user want to calculate to miles
-                */
-            case 0:
-                textField.text = String(format: "%.3f", toFloat(input.text!) / 1.094)
-            case 1:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 36)
-            case 2:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 3)
-            case 3:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 1)
-            case 4:
-                textField.text = String(format: "%.3f", toFloat(input.text!) / 1760)
-            default:
-                break
-            }
-        case 4:
-            switch textField.tag {
-                /*
-                case 0 is for when the user want to calculate to meters
-                case 1 is for when the user want to calculate to inchest
-                case 2 is for when the user want to calculate to feets
-                case 3 is for when the user want to calculate to yards
-                case 4 is for when the user want to calculate to miles
-                */
-            case 0:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 1609)
-            case 1:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 63360)
-            case 2:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 5280)
-            case 3:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 1760)
-            case 4:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 1)
-            default:
-                break
-            }
-        default:
-            break
-        }
-    }
-    func liquidMath(_ input: UITextField, _ textField: UITextField) {
-        //The math for doing weight calculations. This will also round up the answer to the third decimal.
-        switch input.tag {
-            /*
-             case 0 is for when the user want to calculate from litres
-             case 1 is for when the user want to calculate from milliliters
-             case 2 is for when the user want to calculate from pints
-             case 3 is for when the user want to calculate from fluid ounces
-             */
-        case 0:
-            switch textField.tag {
-                /*
-                case 0 is for when the user want to calculate to liters
-                case 1 is for when the user want to calculate to milliliters
-                case 2 is for when the user want to calculate to pints
-                case 3 is for when the user want to calculate to fluid ounces
-                */
-            case 0:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 1)
-            case 1:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 1000)
-            case 2:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 1.76)
-            case 3:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 35.195)
-            default:
-                break
-            }
-        case 1:
-            switch textField.tag {
-                /*
-                case 0 is for when the user want to calculate to liters
-                case 1 is for when the user want to calculate to milliliters
-                case 2 is for when the user want to calculate to pints
-                case 3 is for when the user want to calculate to fluid ounces
-                */
-            case 0:
-                textField.text = String(format: "%.3f", toFloat(input.text!) / 1000)
-            case 1:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 1)
-            case 2:
-                textField.text = String(format: "%.3f", toFloat(input.text!) / 568)
-            case 3:
-                textField.text = String(format: "%.3f", toFloat(input.text!) / 28.413)
-            default:
-                break
-            }
-        case 2:
-            switch textField.tag {
-                /*
-                case 0 is for when the user want to calculate to liters
-                case 1 is for when the user want to calculate to milliliters
-                case 2 is for when the user want to calculate to pints
-                case 3 is for when the user want to calculate to fluid ounces
-                */
-            case 0:
-                textField.text = String(format: "%.3f", toFloat(input.text!) / 1.76)
-            case 1:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 568)
-            case 2:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 1)
-            case 3:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 20)
-            default:
-                break
-            }
-        case 3:
-            switch textField.tag {
-                /*
-                case 0 is for when the user want to calculate to liters
-                case 1 is for when the user want to calculate to milliliters
-                case 2 is for when the user want to calculate to pints
-                case 3 is for when the user want to calculate to fluid ounces
-                */
-            case 0:
-                textField.text = String(format: "%.3f", toFloat(input.text!) / 35.195)
-            case 1:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 28.413)
-            case 2:
-                textField.text = String(format: "%.3f", toFloat(input.text!) / 20)
-            case 3:
-                textField.text = String(format: "%.3f", toFloat(input.text!) * 1)
-            default:
-                break
-            }
-        default:
-            break
-        }
-    }
 }
 
