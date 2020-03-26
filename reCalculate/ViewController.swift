@@ -19,7 +19,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     //This function will be called when the weight button gets pressed.
     
     @IBAction func pressedWeight(_ sender: Any) {
-        let units = ["Kg", "st", "lb", "oz"]
+        let units = ["kg", "st", "lb", "oz"]
         buttonPressed = "weight"
         createInfoView(units)
     }
