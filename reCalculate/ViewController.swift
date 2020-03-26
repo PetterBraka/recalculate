@@ -10,31 +10,94 @@ import Foundation
 import UIKit
 
 class ViewController: UIViewController, UITextFieldDelegate {
-
+    
     var buttonPressed = String()
     @IBOutlet weak var liquid: UIButton!
     @IBOutlet weak var length: UIButton!
     @IBOutlet weak var weight: UIButton!
     @IBOutlet weak var infoStack: UIStackView!
-    //This function will be called when the weight button gets pressed.
     
-    @IBAction func pressedWeight(_ sender: Any) {
-        let units = ["kg", "st", "lb", "oz"]
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        //Setting upp each button to look like a rounded button with an gray outline.
+        weight.backgroundColor = .clear
+        weight.layer.cornerRadius = 20
+        weight.layer.borderWidth = 3
+        weight.layer.borderColor = UIColor.darkGray.cgColor
+        //This part of the code sets up a listener for a tap or a long tapp
+        let weigthTapGesture = UITapGestureRecognizer(target: self, action: #selector(weightTap))
+        weight.addGestureRecognizer(weigthTapGesture)
+        let weightLongGesture = UILongPressGestureRecognizer(target: self, action: #selector(weightLong))
+        weightLongGesture.minimumPressDuration = 1
+        weight.addGestureRecognizer(weightLongGesture)
+        
+        length.backgroundColor = .clear
+        length.layer.cornerRadius = 20
+        length.layer.borderWidth = 3
+        length.layer.borderColor = UIColor.darkGray.cgColor
+        //This part of the code sets up a listener for a tap or a long tapp
+        let lengthTapGesture = UITapGestureRecognizer(target: self, action: #selector(lengthTap))
+        length.addGestureRecognizer(lengthTapGesture)
+        let lengthLongGesture = UILongPressGestureRecognizer(target: self, action: #selector(lengthLong))
+        lengthLongGesture.minimumPressDuration = 1
+        length.addGestureRecognizer(lengthLongGesture)
+        
+        liquid.backgroundColor = .clear
+        liquid.layer.cornerRadius = 20
+        liquid.layer.borderWidth = 3
+        liquid.layer.borderColor = UIColor.darkGray.cgColor
+        //This part of the code sets up a listener for a tap or a long tapp
+        let liquidTapGesture = UITapGestureRecognizer(target: self, action: #selector(liquidTap))
+        liquid.addGestureRecognizer(liquidTapGesture)
+        let liquidLongGesture = UILongPressGestureRecognizer(target: self, action: #selector(liquidLong))
+        liquidLongGesture.minimumPressDuration = 1
+        liquid.addGestureRecognizer(liquidLongGesture)
+        
+        //Starts to listen for the keyboard to changes.
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        
+    }
+    
+    //This function will be called when the weight button gets pressed.
+    @objc func weightTap(_ sender: UIGestureRecognizer){
         buttonPressed = "weight"
+        let units = ["kg", "st", "lb", "oz"]
         createInfoView(units)
     }
+    @objc func weightLong(_ sender: UIGestureRecognizer){
+        if sender.state == .began{
+            print("Long tap")
+        }
+    }
+    
     //This function will be called when the height button gets pressed.
-    @IBAction func pressedLength(_ sender: Any) {
+    @objc func lengthTap(_ sender: UIGestureRecognizer){
         let units = ["m", "in", "ft", "yd", "mi"]
         buttonPressed = "length"
         createInfoView(units)
     }
+    @objc func lengthLong(_ sender: UIGestureRecognizer){
+        if sender.state == .began{
+            print("Long tap")
+        }
+    }
+    
     //This function will be called when the liquid button gets pressed.
-    @IBAction func pressedLiquid(_ sender: Any) {
+    @objc func liquidTap(_ sender: UIGestureRecognizer){
         let units = ["l", "ml", "fl. oz", "pt"]
         buttonPressed = "liquid"
         createInfoView(units)
     }
+    @objc func liquidLong(_ sender: UIGestureRecognizer){
+        if sender.state == .began{
+            print("Long tap")
+        }
+    }
+    
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         //This method cleans all the textFields when someone clicks on one of them.
         for stack in infoStack.subviews{
@@ -101,29 +164,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
             infoStack.addArrangedSubview(infoCard)
         }
     }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        //Setting upp each button to look like a rounded button with an gray outline.
-        liquid.backgroundColor = .clear
-        liquid.layer.cornerRadius = 20
-        liquid.layer.borderWidth = 3
-        liquid.layer.borderColor = UIColor.darkGray.cgColor
-        length.backgroundColor = .clear
-        length.layer.cornerRadius = 20
-        length.layer.borderWidth = 3
-        length.layer.borderColor = UIColor.darkGray.cgColor
-        weight.backgroundColor = .clear
-        weight.layer.cornerRadius = 20
-        weight.layer.borderWidth = 3
-        weight.layer.borderColor = UIColor.darkGray.cgColor
-
-        //Starts to listen for the keyboard to changes.
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
-        }
-
     
     @objc func keyboardWillChange(notification: Notification){
         //gets the hight of the keyboard and moves the UI upp so that you can se whats happening and notting is coverd by the keyboard.
