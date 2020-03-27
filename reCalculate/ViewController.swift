@@ -17,6 +17,11 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var weight: UIButton!
     @IBOutlet weak var infoStack: UIStackView!
     
+
+    let weightUnits = [ UnitMass.kilograms, UnitMass.stones, UnitMass.pounds, UnitMass.ounces ]
+    let lengthUnits = [ UnitLength.meters, UnitLength.inches, UnitLength.feet, UnitLength.yards, UnitLength.miles ]
+    let liquidUnits = [ UnitVolume.liters, UnitVolume.milliliters, UnitVolume.fluidOunces, UnitVolume.pints ]
+    
     
     
     override func viewDidLoad() {
@@ -74,8 +79,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
      */
     @objc func weightTap(_ sender: UIGestureRecognizer){
         buttonPressed = "weight"
-        let units = ["kg", "st", "lb", "oz"]
-        createInfoView(units)
+        createInfoView(weightUnits)
     }
     
     /**
@@ -101,9 +105,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     */
     @objc func lengthTap(_ sender: UIGestureRecognizer){
-        let units = ["m", "in", "ft", "yd", "mi"]
         buttonPressed = "length"
-        createInfoView(units)
+        createInfoView(lengthUnits)
     }
     
     /**
@@ -129,9 +132,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     */
     @objc func liquidTap(_ sender: UIGestureRecognizer){
-        let units = ["l", "ml", "fl. oz", "pt"]
         buttonPressed = "liquid"
-        createInfoView(units)
+        createInfoView(liquidUnits)
     }
     
     /**
@@ -174,14 +176,28 @@ class ViewController: UIViewController, UITextFieldDelegate {
      createInfoView(units)
      ```
      */
-    fileprivate func createInfoView(_ units: [String]) {
+    fileprivate func createInfoView(_ units: [Any]) {
         for view in infoStack.subviews {
             //cleans the infoStack to make it ready for the new units.
             view.removeFromSuperview()
         }
         for unit in units {
             let newInfoCard = InfoCard.init()
-            newInfoCard.creatInfoCard(unit, units.firstIndex(of: unit)!)
+            if unit is UnitMass {
+                let prefix = unit as? UnitMass
+                let unitArray = units as? [UnitMass]
+                newInfoCard.creatInfoCard((prefix?.symbol)!, unitArray!.firstIndex(of: unit as! UnitMass)!)
+            }
+            if unit is UnitLength {
+                let prefix = unit as? UnitLength
+                let unitArray = units as? [UnitLength]
+                newInfoCard.creatInfoCard((prefix?.symbol)!, unitArray!.firstIndex(of: unit as! UnitLength)!)
+            }
+            if unit is UnitVolume {
+                let prefix = unit as? UnitVolume
+                let unitArray = units as? [UnitVolume]
+                newInfoCard.creatInfoCard((prefix?.symbol)!, unitArray!.firstIndex(of: unit as! UnitVolume)!)
+            }
             newInfoCard.textField.delegate = self
             let toolBar = UIToolbar()
             toolBar.sizeToFit()
