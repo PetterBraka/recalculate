@@ -180,38 +180,16 @@ class ViewController: UIViewController, UITextFieldDelegate {
             view.removeFromSuperview()
         }
         for unit in units {
-            let infoCard = UIStackView()
-            infoCard.axis = .horizontal
-            infoCard.alignment = .trailing
-            infoCard.distribution = .fill
-            
-            let userInput = UITextField(frame : CGRect(x: 0, y: 0, width: 200, height: 40))
-            userInput.attributedPlaceholder = NSAttributedString(string: "0.000", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-            userInput.textColor = UIColor.white
-            userInput.textAlignment = .right
-            userInput.tag = units.firstIndex(of: unit)!
-            userInput.font = UIFont(name: "American Typewriter", size: 20)
-            userInput.borderStyle = UITextField.BorderStyle.roundedRect
-            userInput.keyboardType = UIKeyboardType.decimalPad
-            userInput.returnKeyType = UIReturnKeyType.done
-            userInput.backgroundColor = UIColor.darkGray
-            userInput.delegate = self
-            
+            let newInfoCard = InfoCard.init()
+            newInfoCard.creatInfoCard(unit, units.firstIndex(of: unit)!)
+            newInfoCard.textField.delegate = self
             let toolBar = UIToolbar()
             toolBar.sizeToFit()
             let flexibleSpaced = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
             let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneClicked))
             toolBar.setItems([flexibleSpaced, doneButton], animated: false)
-            userInput.inputAccessoryView = toolBar
-            infoCard.addArrangedSubview(userInput)
-            
-            let label = UILabel(frame: CGRect.zero)
-            label.text = " " + unit
-            label.textColor = .white
-            label.font = UIFont(name: "American Typewriter", size: 20)
-            label.addConstraint(NSLayoutConstraint(item: label, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 60))
-            infoCard.addArrangedSubview(label)
-            infoStack.addArrangedSubview(infoCard)
+            newInfoCard.textField.inputAccessoryView = toolBar
+            infoStack.addArrangedSubview(newInfoCard.infoCard)
         }
     }
     
@@ -353,6 +331,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         }
         return convertedValue
     }
+    
     deinit {
         //Stopps listening for the keyboard to changes.
         NotificationCenter.default.removeObserver(UIResponder.keyboardWillShowNotification)
