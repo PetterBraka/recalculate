@@ -62,36 +62,84 @@ class ViewController: UIViewController, UITextFieldDelegate {
         
     }
     
-    //This function will be called when the weight button gets pressed.
+    /**
+     This function will be called when the button named weight gets tapped.
+     
+     - parameter sender: **UIGestureRecognizer**
+     - returns: **nil**
+     - warning:
+     
+     */
     @objc func weightTap(_ sender: UIGestureRecognizer){
         buttonPressed = "weight"
         let units = ["kg", "st", "lb", "oz"]
         createInfoView(units)
     }
+    
+    /**
+    This function will be called when the weight button gets pressed for a longer time.
+    
+    - parameter sender: **UIGestureRecognizer**
+    - returns: **nil**
+    - warning:
+    
+    */
     @objc func weightLong(_ sender: UIGestureRecognizer){
         if sender.state == .began{
             print("Long tap")
         }
     }
     
-    //This function will be called when the height button gets pressed.
+    /**
+    This function will be called when the button named length gets tapped.
+    
+    - parameter sender: **UIGestureRecognizer**
+    - returns: **nil**
+    - warning:
+    
+    */
     @objc func lengthTap(_ sender: UIGestureRecognizer){
         let units = ["m", "in", "ft", "yd", "mi"]
         buttonPressed = "length"
         createInfoView(units)
     }
+    
+    /**
+    This function will be called when the length button gets pressed for a longer time.
+    
+    - parameter sender: **UIGestureRecognizer**
+    - returns: **nil**
+    - warning:
+    
+    */
     @objc func lengthLong(_ sender: UIGestureRecognizer){
         if sender.state == .began{
             print("Long tap")
         }
     }
     
-    //This function will be called when the liquid button gets pressed.
+    /**
+    This function will be called when the button named liquid gets tapped.
+    
+    - parameter sender: **UIGestureRecognizer**
+    - returns: **nil**
+    - warning:
+    
+    */
     @objc func liquidTap(_ sender: UIGestureRecognizer){
         let units = ["l", "ml", "fl. oz", "pt"]
         buttonPressed = "liquid"
         createInfoView(units)
     }
+    
+    /**
+    This function will be called when the liquid button gets pressed for a longer time.
+    
+    - parameter sender: **UIGestureRecognizer**
+    - returns: **nil**
+    - warning:
+    
+    */
     @objc func liquidLong(_ sender: UIGestureRecognizer){
         if sender.state == .began{
             print("Long tap")
@@ -99,7 +147,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        //This method cleans all the textFields when someone clicks on one of them.
         for stack in infoStack.subviews{
             for view in stack.subviews {
                 if view is UITextField, let input = view as? UITextField {
@@ -110,30 +157,24 @@ class ViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
-    func handleInput(_ input: UITextField) {
-        for stack in infoStack.subviews {
-            for view in stack.subviews {
-                if view is UITextField, let textField = view as? UITextField{
-                    updateUI(input, textField)
-                }
-            }
-        }
-    }
-    
-    func toFloat(_ value: String) -> Float{
-        let formatter = NumberFormatter()
-        formatter.locale = Locale.current // USA: Locale(identifier: "en_US")
-        formatter.numberStyle = .decimal
-        let number = formatter.number(from: value)
-        if number == nil {
-            return 0
-        }
-        return number as! Float
-    }
-    
+    /**
+     This funciton will create infoCards containing a textField and a label. The textField is were the user will enter a value. The label will show the prefix beside the textField.
+     
+     - parameter units: An array of strings with the units.
+     - returns: null
+     - warning:
+     
+     # Notes: #
+     1. Parameters must be an **Array** containg **strings** of the units you want to create a infocard for
+     
+     # Example #
+     ```
+     createInfoView(units)
+     ```
+     */
     fileprivate func createInfoView(_ units: [String]) {
-        //This method will take a string array and make an input box for the user and show the unit its for beside it.
         for view in infoStack.subviews {
+            //cleans the infoStack to make it ready for the new units.
             view.removeFromSuperview()
         }
         for unit in units {
@@ -141,7 +182,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
             infoCard.axis = .horizontal
             infoCard.alignment = .trailing
             infoCard.distribution = .fill
-            
             let userInput = UITextField(frame : CGRect(x: 0, y: 0, width: 200, height: 40))
             userInput.attributedPlaceholder = NSAttributedString(string: "0.000", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
             userInput.textColor = UIColor.white
@@ -154,7 +194,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
             userInput.backgroundColor = UIColor.darkGray
             userInput.delegate = self
             infoCard.addArrangedSubview(userInput)
-            
             let label = UILabel(frame: CGRect.zero)
             label.text = " " + unit
             label.textColor = .white
@@ -165,9 +204,15 @@ class ViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    /**
+    This function will get the hight of the keyboard and move the UI upp so that the keyboard is not covering anything, and it will move the UI down when the keyboard moves down.
+    
+    - parameter notification: will catch any notification happening.
+    - returns: **nil**
+    - warning:
+    
+    */
     @objc func keyboardWillChange(notification: Notification){
-        //gets the hight of the keyboard and moves the UI upp so that you can se whats happening and notting is coverd by the keyboard.
-        
         guard let kbHight = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.height else {
             return
         }
@@ -176,6 +221,92 @@ class ViewController: UIViewController, UITextFieldDelegate {
         } else {
             view.frame.origin.y = 0
         }
+    }
+    
+    /**
+     This will chack for changes in the UITextFields and call for an updating of  the other UITextFields.
+     
+     - parameter input: A UITextField were the user inputs some values.
+     - returns: **nil**
+     - warning:
+     
+     # Notes: #
+     1.  Parameters input must be an **UITextField**
+     
+     # Example #
+     ```
+     handleInput(input)
+     ```
+     */
+    func handleInput(_ input: UITextField) {
+        for stack in infoStack.subviews {
+            for view in stack.subviews {
+                if view is UITextField, let output = view as? UITextField{
+                    updateUI(input, output)
+                }
+            }
+        }
+    }
+    
+    /**
+     This function will update all the **UITextField**s
+     
+     - parameter input: The **UITextField** that gets the input form the user.
+     - parameter output: The output **UITextField** .
+     - returns: **nil**
+     - warning:
+     
+     # Example #
+     ```
+     updateUI(input, output)
+     ```
+     */
+    func updateUI(_ input: UITextField, _ output: UITextField) {
+        guard let inputString = input.text, let inputValue = Double(inputString) else {
+            return
+        }
+        let convertedValue = convert( inputValue, input.tag, output.tag )
+        output.text = String(format: "%.3f", convertedValue)
+    }
+    
+    /**
+     This function will convert a unit  to another unit depending on what type off unit type it is.
+     
+     - parameter value: a **Double** that will be converted.
+     - parameter inputUintIndex: an **Integer** that tells whitch unit to covert from
+     - parameter outputUnitIndex: an **Integer** that tells whitch unit to covert too
+     - returns: a **Double** the value coverted
+     
+     # Notes: #
+     1. paremeter value needs too be of type **Double**
+     2. paremeter inputUnitTag needs too be of type **Integer**
+     3. paremeter outputUnitTag needs too be of type **Integer**
+     
+     # Example #
+     ```
+     outputValue = convert(inputValue, inputUnitTag, outputUnitTag)
+     ```
+     */
+    private func convert(_ value: Double, _ inputUnitIndex: Int, _ outputUnitIndex: Int) -> Double {
+        //The mass unit will be picked by the index of the textfield were the user edited
+        var convertedValue = Double()
+        switch buttonPressed {
+        case "weight":
+            let unitLookupTable = [ UnitMass.kilograms, UnitMass.stones, UnitMass.pounds, UnitMass.ounces ]
+            let mass = Measurement(value: value, unit: unitLookupTable[inputUnitIndex])
+            convertedValue = mass.converted(to: unitLookupTable[outputUnitIndex]).value
+        case "length":
+            let unitLookupTable = [ UnitLength.meters, UnitLength.inches, UnitLength.feet, UnitLength.yards, UnitLength.miles ]
+            let length = Measurement(value: value, unit: unitLookupTable[inputUnitIndex])
+            convertedValue = length.converted(to: unitLookupTable[outputUnitIndex]).value
+        case "liquid":
+            let unitLookupTable = [ UnitVolume.liters, UnitVolume.milliliters, UnitVolume.fluidOunces, UnitVolume.pints ]
+            let liquid = Measurement(value: value, unit: unitLookupTable[inputUnitIndex])
+            convertedValue = liquid.converted(to: unitLookupTable[outputUnitIndex]).value
+        default:
+            break
+        }
+        return convertedValue
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -189,35 +320,5 @@ class ViewController: UIViewController, UITextFieldDelegate {
         NotificationCenter.default.removeObserver(UIResponder.keyboardWillHideNotification)
         NotificationCenter.default.removeObserver(UIResponder.keyboardWillChangeFrameNotification)
     }
-    
-    func updateUI(_ input: UITextField, _ textField: UITextField) {
-        guard let inputString = input.text, let inputValue = Double(inputString) else {
-            return
-        }
-        let convertedValue = convert(mass: inputValue, inputUnitIndex: input.tag, outputUnitIndex: textField.tag)
-        textField.text = String(format: "%.3f", convertedValue)
-    }
-    private func convert(mass: Double, inputUnitIndex: Int, outputUnitIndex: Int) -> Double {
-        //The mass unit will be picked by the index of the textfield were the user edited
-        var convertedValue = Double()
-        switch buttonPressed {
-        case "weight":
-            let unitLookupTable = [ UnitMass.kilograms, UnitMass.stones, UnitMass.pounds, UnitMass.ounces ]
-            let mass = Measurement(value: mass, unit: unitLookupTable[inputUnitIndex])
-            convertedValue = mass.converted(to: unitLookupTable[outputUnitIndex]).value
-        case "length":
-            let unitLookupTable = [ UnitLength.meters, UnitLength.inches, UnitLength.feet, UnitLength.yards, UnitLength.miles ]
-            let length = Measurement(value: mass, unit: unitLookupTable[inputUnitIndex])
-            convertedValue = length.converted(to: unitLookupTable[outputUnitIndex]).value
-        case "liquid":
-            let unitLookupTable = [ UnitVolume.liters, UnitVolume.milliliters, UnitVolume.fluidOunces, UnitVolume.pints ]
-            let liquid = Measurement(value: mass, unit: unitLookupTable[inputUnitIndex])
-            convertedValue = liquid.converted(to: unitLookupTable[outputUnitIndex]).value
-        default:
-            break
-        }
-        return convertedValue
-    }
-    
 }
 
