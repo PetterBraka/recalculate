@@ -17,6 +17,11 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var weight: UIButton!
     @IBOutlet weak var infoStack: UIStackView!
     
+
+    let weightUnits = [ UnitMass.kilograms, UnitMass.stones, UnitMass.pounds, UnitMass.ounces ]
+    let lengthUnits = [ UnitLength.meters, UnitLength.inches, UnitLength.feet, UnitLength.yards, UnitLength.miles ]
+    let liquidUnits = [ UnitVolume.liters, UnitVolume.milliliters, UnitVolume.fluidOunces, UnitVolume.pints ]
+    
     
     
     override func viewDidLoad() {
@@ -74,8 +79,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
      */
     @objc func weightTap(_ sender: UIGestureRecognizer){
         buttonPressed = "weight"
-        let units = ["kg", "st", "lb", "oz"]
-        createInfoView(units)
+        createInfoView(weightUnits)
     }
     
     /**
@@ -101,9 +105,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     */
     @objc func lengthTap(_ sender: UIGestureRecognizer){
-        let units = ["m", "in", "ft", "yd", "mi"]
         buttonPressed = "length"
-        createInfoView(units)
+        createInfoView(lengthUnits)
     }
     
     /**
@@ -129,9 +132,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     */
     @objc func liquidTap(_ sender: UIGestureRecognizer){
-        let units = ["l", "ml", "fl. oz", "pt"]
         buttonPressed = "liquid"
-        createInfoView(units)
+        createInfoView(liquidUnits)
     }
     
     /**
@@ -174,44 +176,36 @@ class ViewController: UIViewController, UITextFieldDelegate {
      createInfoView(units)
      ```
      */
-    fileprivate func createInfoView(_ units: [String]) {
+    fileprivate func createInfoView(_ units: [Any]) {
         for view in infoStack.subviews {
             //cleans the infoStack to make it ready for the new units.
             view.removeFromSuperview()
         }
         for unit in units {
-            let infoCard = UIStackView()
-            infoCard.axis = .horizontal
-            infoCard.alignment = .trailing
-            infoCard.distribution = .fill
-            
-            let userInput = UITextField(frame : CGRect(x: 0, y: 0, width: 200, height: 40))
-            userInput.attributedPlaceholder = NSAttributedString(string: "0.000", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-            userInput.textColor = UIColor.white
-            userInput.textAlignment = .right
-            userInput.tag = units.firstIndex(of: unit)!
-            userInput.font = UIFont(name: "American Typewriter", size: 20)
-            userInput.borderStyle = UITextField.BorderStyle.roundedRect
-            userInput.keyboardType = UIKeyboardType.decimalPad
-            userInput.returnKeyType = UIReturnKeyType.done
-            userInput.backgroundColor = UIColor.darkGray
-            userInput.delegate = self
-            
+            let newInfoCard = InfoCard.init()
+            if unit is UnitMass {
+                let prefix = unit as? UnitMass
+                let unitArray = units as? [UnitMass]
+                newInfoCard.creatInfoCard((prefix?.symbol)!, unitArray!.firstIndex(of: unit as! UnitMass)!)
+            }
+            if unit is UnitLength {
+                let prefix = unit as? UnitLength
+                let unitArray = units as? [UnitLength]
+                newInfoCard.creatInfoCard((prefix?.symbol)!, unitArray!.firstIndex(of: unit as! UnitLength)!)
+            }
+            if unit is UnitVolume {
+                let prefix = unit as? UnitVolume
+                let unitArray = units as? [UnitVolume]
+                newInfoCard.creatInfoCard((prefix?.symbol)!, unitArray!.firstIndex(of: unit as! UnitVolume)!)
+            }
+            newInfoCard.textField.delegate = self
             let toolBar = UIToolbar()
             toolBar.sizeToFit()
             let flexibleSpaced = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
             let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneClicked))
             toolBar.setItems([flexibleSpaced, doneButton], animated: false)
-            userInput.inputAccessoryView = toolBar
-            infoCard.addArrangedSubview(userInput)
-            
-            let label = UILabel(frame: CGRect.zero)
-            label.text = " " + unit
-            label.textColor = .white
-            label.font = UIFont(name: "American Typewriter", size: 20)
-            label.addConstraint(NSLayoutConstraint(item: label, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 60))
-            infoCard.addArrangedSubview(label)
-            infoStack.addArrangedSubview(infoCard)
+            newInfoCard.textField.inputAccessoryView = toolBar
+            infoStack.addArrangedSubview(newInfoCard.infoCard)
         }
     }
     
@@ -353,6 +347,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         }
         return convertedValue
     }
+    
     deinit {
         //Stopps listening for the keyboard to changes.
         NotificationCenter.default.removeObserver(UIResponder.keyboardWillShowNotification)
