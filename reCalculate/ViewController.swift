@@ -33,6 +33,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         weightLongGesture.minimumPressDuration = 1
         weight.addGestureRecognizer(weightLongGesture)
         
+        //Setting upp each button to look like a rounded button with an gray outline.
         length.backgroundColor = .clear
         length.layer.cornerRadius = 20
         length.layer.borderWidth = 3
@@ -44,6 +45,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         lengthLongGesture.minimumPressDuration = 1
         length.addGestureRecognizer(lengthLongGesture)
         
+        //Setting upp each button to look like a rounded button with an gray outline.
         liquid.backgroundColor = .clear
         liquid.layer.cornerRadius = 20
         liquid.layer.borderWidth = 3
@@ -182,6 +184,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
             infoCard.axis = .horizontal
             infoCard.alignment = .trailing
             infoCard.distribution = .fill
+            
             let userInput = UITextField(frame : CGRect(x: 0, y: 0, width: 200, height: 40))
             userInput.attributedPlaceholder = NSAttributedString(string: "0.000", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
             userInput.textColor = UIColor.white
@@ -189,11 +192,19 @@ class ViewController: UIViewController, UITextFieldDelegate {
             userInput.tag = units.firstIndex(of: unit)!
             userInput.font = UIFont(name: "American Typewriter", size: 20)
             userInput.borderStyle = UITextField.BorderStyle.roundedRect
-            userInput.keyboardType = UIKeyboardType.numbersAndPunctuation
+            userInput.keyboardType = UIKeyboardType.decimalPad
             userInput.returnKeyType = UIReturnKeyType.done
             userInput.backgroundColor = UIColor.darkGray
             userInput.delegate = self
+            
+            let toolBar = UIToolbar()
+            toolBar.sizeToFit()
+            let flexibleSpaced = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+            let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneClicked))
+            toolBar.setItems([flexibleSpaced, doneButton], animated: false)
+            userInput.inputAccessoryView = toolBar
             infoCard.addArrangedSubview(userInput)
+            
             let label = UILabel(frame: CGRect.zero)
             label.text = " " + unit
             label.textColor = .white
@@ -204,6 +215,17 @@ class ViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    /**
+     This function will be called if the user press the done button and are finiched entering a value.
+     
+     # Notes: #
+     it will call for handleInput and this will check for any updates in any of the text feilds.
+     */
+    @objc func doneClicked(){
+        view.endEditing(true)
+        handleInput(searchForUpdates())
+    }
+
     /**
     This function will get the hight of the keyboard and move the UI upp so that the keyboard is not covering anything, and it will move the UI down when the keyboard moves down.
     
@@ -246,6 +268,29 @@ class ViewController: UIViewController, UITextFieldDelegate {
                 }
             }
         }
+    }
+    
+    /**
+     This function will go through each one of the infocards in the infoStack. it will not stopp before it finds a textfield that has something writen in it.
+     
+     - returns: **searching** it contains the UITextField that has been edited.
+     
+     # Example #
+     ```
+     textField = searchForUpdates()
+     ```
+     */
+    func searchForUpdates() -> UITextField {
+        for infocard in infoStack.subviews {
+            for view in infocard.subviews {
+                if view is UITextField, let searching = view as? UITextField {
+                    if searching.text != "" {
+                        return searching
+                    }
+                }
+            }
+        }
+        return UITextField.init()
     }
     
     /**
@@ -307,12 +352,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
             break
         }
         return convertedValue
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        handleInput(textField)
-        return true
     }
     deinit {
         //Stopps listening for the keyboard to changes.
