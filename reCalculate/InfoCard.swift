@@ -12,14 +12,16 @@ class InfoCard: NSObject {
     var textField: UITextField
     var prefixLable: UILabel
     var infoCard: UIStackView
+    var option: UISwitch
     
     override init() {
         self.textField = UITextField()
         self.prefixLable = UILabel()
         self.infoCard = UIStackView()
+        self.option = UISwitch()
     }
     
-    func creatInfoCard(_ unit: String, _ unitIndex: Int){
+    func makeInfoCard(_ unit: String, _ unitIndex: Int){
         self.infoCard.axis = .horizontal
         self.infoCard.alignment = .trailing
         self.infoCard.distribution = .fill
@@ -44,6 +46,39 @@ class InfoCard: NSObject {
         infoCard.addArrangedSubview(label)
     }
     
-    
-
+    func makeOptionCard(_ unit: Any, _ usersUnits: [AnyObject]){
+        var unitOption = unit
+        var chosenUnits = usersUnits
+        if unit is UnitMass{
+            unitOption = unit as! UnitMass
+            chosenUnits = usersUnits as! [UnitMass]
+        } else if unit is UnitLength {
+            unitOption = unit as! UnitLength
+            chosenUnits = usersUnits as! [UnitLength]
+        } else if unit is UnitVolume{
+            unitOption = unit as! UnitVolume
+            chosenUnits = usersUnits as! [UnitVolume]
+        }
+        self.infoCard = UIStackView()
+        self.infoCard.axis = .horizontal
+        self.infoCard.alignment = .trailing
+        self.infoCard.distribution = .fill
+        
+        self.option = UISwitch()
+        for usersUnit in chosenUnits {
+            if (unitOption as AnyObject).isEqual(usersUnit){
+                self.option.setOn(true, animated: false)
+                break
+            } else {
+                self.option.setOn(false, animated: false)
+            }
+        }
+        self.infoCard.addArrangedSubview(self.option)
+        self.prefixLable.text = " " + (unitOption as AnyObject).symbol
+        self.prefixLable.textColor = .white
+        self.prefixLable.font = UIFont(name: "American Typewriter", size: 20)
+        self.prefixLable.addConstraint(NSLayoutConstraint(item: self.prefixLable, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 60))
+        self.infoCard.addArrangedSubview(self.prefixLable)
+        return
+    }
 }
