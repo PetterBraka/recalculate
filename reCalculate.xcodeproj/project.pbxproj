@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		33BF5796242E7DC10036FA6F /* InfoCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BF5795242E7DC10036FA6F /* InfoCard.swift */; };
+		33BF5796242E7DC10036FA6F /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BF5795242E7DC10036FA6F /* Card.swift */; };
 		33F1993E2427EFA200F9A2E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F1993D2427EFA200F9A2E6 /* AppDelegate.swift */; };
 		33F199402427EFA200F9A2E6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F1993F2427EFA200F9A2E6 /* SceneDelegate.swift */; };
 		33F199422427EFA200F9A2E6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F199412427EFA200F9A2E6 /* ViewController.swift */; };
@@ -17,7 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		33BF5795242E7DC10036FA6F /* InfoCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCard.swift; sourceTree = "<group>"; };
+		33BF5795242E7DC10036FA6F /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		33F1993A2427EFA200F9A2E6 /* reCalculate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = reCalculate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		33F1993D2427EFA200F9A2E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		33F1993F2427EFA200F9A2E6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -61,7 +61,7 @@
 				33F1993D2427EFA200F9A2E6 /* AppDelegate.swift */,
 				33F1993F2427EFA200F9A2E6 /* SceneDelegate.swift */,
 				33F199412427EFA200F9A2E6 /* ViewController.swift */,
-				33BF5795242E7DC10036FA6F /* InfoCard.swift */,
+				33BF5795242E7DC10036FA6F /* Card.swift */,
 				33F199432427EFA200F9A2E6 /* Main.storyboard */,
 				33F199462427EFA400F9A2E6 /* Assets.xcassets */,
 				33F199482427EFA400F9A2E6 /* LaunchScreen.storyboard */,
@@ -144,7 +144,7 @@
 				33F199422427EFA200F9A2E6 /* ViewController.swift in Sources */,
 				33F1993E2427EFA200F9A2E6 /* AppDelegate.swift in Sources */,
 				33F199402427EFA200F9A2E6 /* SceneDelegate.swift in Sources */,
-				33BF5796242E7DC10036FA6F /* InfoCard.swift in Sources */,
+				33BF5796242E7DC10036FA6F /* Card.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

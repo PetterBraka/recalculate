@@ -174,14 +174,14 @@ class ViewController: UIViewController, UITextFieldDelegate {
     - warning:
     
     # Notes: #
-    1. Parameters must be an **Array** containg **UnitMass**, **UnitLength** or **UnitVolume** of the units you want to create a infocard for
+    1. Parameters must be an **Array** containg **UnitMass**, **UnitLength** or **UnitVolume** of the units you want to create a optionCard for
     
     # Example #
     ```
     createInfoView(units)
     ```
     */
-    fileprivate func createOptionView(_ usersUnits: [AnyObject]) {
+    func createOptionView(_ usersUnits: [AnyObject]) {
         for view in infoStack.subviews {
             //cleans the infoStack to make it ready for the new units.
             view.removeFromSuperview()
@@ -198,7 +198,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
             break
         }
         for unitOption in optionalUnits {
-            let newOptionCard = InfoCard.init()
+            let newOptionCard = Card.init()
             newOptionCard.makeOptionCard(unitOption, usersUnits)
             infoStack.addArrangedSubview(newOptionCard.infoCard)
         }
@@ -220,13 +220,13 @@ class ViewController: UIViewController, UITextFieldDelegate {
      createInfoView(units)
      ```
      */
-    fileprivate func createInfoView(_ units: [Any]) {
+    func createInfoView(_ units: [Any]) {
         for view in infoStack.subviews {
             //cleans the infoStack to make it ready for the new units.
             view.removeFromSuperview()
         }
         for unit in units {
-            let newInfoCard = InfoCard.init()
+            let newInfoCard = Card.init()
             if unit is UnitMass {
                 let prefix = unit as? UnitMass
                 let unitArray = units as? [UnitMass]

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class InfoCard: NSObject {
+class Card: NSObject {
     var textField: UITextField
     var prefixLable: UILabel
     var infoCard: UIStackView
@@ -21,6 +21,23 @@ class InfoCard: NSObject {
         self.option = UISwitch()
     }
     
+    /**
+    This funciton will create infoCards of type **UIStackView** containing a **UITextField** and a **UILabel**. The **UITextField** is were the user can input information(number value). The **UILable** will show the prefix beside the **UITextField**.
+    
+    - parameter unit: A **String** containg the symbol of a unit
+    - parameter unitInex: A **Integer** containg the position of the card getting made.
+    - returns: null
+    - warning:
+    
+    # Notes: #
+    1. Parameter must be an **String** containg **UnitMass.Symbol**, **UnitLength.Symbol** or **UnitVolume.Symbol**
+     2. Parameter must be an **Integer** with the index of the card getting made
+    
+    # Example #
+    ```
+    makeInfoCard(unit, unitIndex)
+    ```
+    */
     func makeInfoCard(_ unit: String, _ unitIndex: Int){
         self.infoCard.axis = .horizontal
         self.infoCard.alignment = .trailing
@@ -46,6 +63,22 @@ class InfoCard: NSObject {
         infoCard.addArrangedSubview(label)
     }
     
+    /**
+    This funciton will create option Cards containing a **UISwitch** and a **UILabel**. The **UISwitch** is were the user can turn a unit of or on. The **UILabel** will show the prefix beside the **UISwitch**.
+    
+    - parameter unit: A **object** of **Any** type, containg the unit you want to make an option card for.
+    - parameter usersUnits: An **Array** with **AnyObject** with the units that is turend on by the user.
+    - returns: null
+    - warning:
+    
+    # Notes: #
+    1. Parameters must be a **UnitMass**, **UnitLength** or **UnitVolume** of that you want to create a option card for. the second parameter must be an **Array** containg **UnitMass**, **UnitLength** or **UnitVolume** of the units you want to create a optionCard for
+    
+    # Example #
+    ```
+    makeOptionCard(unitOption, usersUnits)
+    ```
+    */
     func makeOptionCard(_ unit: Any, _ usersUnits: [AnyObject]){
         var unitOption = unit
         var chosenUnits = usersUnits
