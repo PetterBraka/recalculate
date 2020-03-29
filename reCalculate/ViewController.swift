@@ -18,12 +18,13 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var infoStack: UIStackView!
     
     ///predefined **Array** with the different units that will be used for weights.
-    let weightUnits = [ UnitMass.kilograms, UnitMass.stones, UnitMass.pounds, UnitMass.ounces ]
+    var weightUnits = [ UnitMass.kilograms, UnitMass.stones, UnitMass.pounds, UnitMass.ounces ]
     ///predefined **Array** with the different units that will be used for lengths.
-    let lengthUnits = [ UnitLength.meters, UnitLength.inches, UnitLength.feet, UnitLength.yards, UnitLength.miles ]
+    var lengthUnits = [ UnitLength.meters, UnitLength.inches, UnitLength.feet, UnitLength.yards, UnitLength.miles ]
     ///predefined **Array** with the different units that will be used for liquids.
-    let liquidUnits = [ UnitVolume.liters, UnitVolume.milliliters, UnitVolume.imperialFluidOunces, UnitVolume.imperialPints ]
-    
+    var liquidUnits = [ UnitVolume.liters, UnitVolume.milliliters, UnitVolume.imperialFluidOunces, UnitVolume.imperialPints ]
+
+    var optionalUnits = [AnyObject]()
     
     
     override func viewDidLoad() {
@@ -186,7 +187,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
             //cleans the infoStack to make it ready for the new units.
             view.removeFromSuperview()
         }
-        var optionalUnits = [AnyObject]()
         switch buttonPressed {
         case "weight":
             optionalUnits = [ UnitMass.grams, UnitMass.kilograms, UnitMass.metricTons, UnitMass.stones, UnitMass.pounds, UnitMass.ounces ]
@@ -197,10 +197,48 @@ class ViewController: UIViewController, UITextFieldDelegate {
         default:
             break
         }
+        var unitTag = 0
         for unitOption in optionalUnits {
             let newOptionCard = Card.init()
-            newOptionCard.makeOptionCard(unitOption, usersUnits)
+            newOptionCard.makeOptionCard(unitOption, usersUnits, unitTag)
+            newOptionCard.switchOption.addTarget(self, action: #selector(switchChanged), for: .valueChanged)
             infoStack.addArrangedSubview(newOptionCard.infoCard)
+            unitTag += 1
+        }
+    }
+    
+    @objc func switchChanged(mySwitch: UISwitch){
+        switch mySwitch.isOn {
+        case true:
+            print("\(mySwitch.tag) ON")
+            switch buttonPressed {
+            case "weight":
+                var options = optionalUnits as! [UnitMass]
+                weightUnits.append(options.remove(at: mySwitch.tag))
+            case "length":
+                var options = optionalUnits as! [UnitLength]
+                lengthUnits.append(options.remove(at: mySwitch.tag))
+            case "liquid":
+                var options = optionalUnits as! [UnitVolume]
+                liquidUnits.append(options.remove(at: mySwitch.tag))
+            default:
+                break
+            }
+        case false:
+            print("\(mySwitch.tag) OFF")
+            switch buttonPressed {
+            case "weight":
+                var options = optionalUnits as! [UnitMass]
+                weightUnits.remove(at: weightUnits.firstIndex(of: options.remove(at: mySwitch.tag))!)
+                case "length":
+                    var options = optionalUnits as! [UnitLength]
+                    lengthUnits.remove(at: lengthUnits.firstIndex(of: options.remove(at: mySwitch.tag))!)
+                case "liquid":
+                    var options = optionalUnits as! [UnitVolume]
+                    liquidUnits.remove(at: liquidUnits.firstIndex(of: options.remove(at: mySwitch.tag))!)
+            default:
+                break
+            }
         }
         
     }
@@ -375,17 +413,14 @@ class ViewController: UIViewController, UITextFieldDelegate {
         var convertedValue = Double()
         switch buttonPressed {
         case "weight":
-            let unitLookupTable = [ UnitMass.kilograms, UnitMass.stones, UnitMass.pounds, UnitMass.ounces ]
-            let mass = Measurement(value: value, unit: unitLookupTable[inputUnitIndex])
-            convertedValue = mass.converted(to: unitLookupTable[outputUnitIndex]).value
+            let mass = Measurement(value: value, unit: weightUnits[inputUnitIndex])
+            convertedValue = mass.converted(to: weightUnits[outputUnitIndex]).value
         case "length":
-            let unitLookupTable = [ UnitLength.meters, UnitLength.inches, UnitLength.feet, UnitLength.yards, UnitLength.miles ]
-            let length = Measurement(value: value, unit: unitLookupTable[inputUnitIndex])
-            convertedValue = length.converted(to: unitLookupTable[outputUnitIndex]).value
+            let length = Measurement(value: value, unit: lengthUnits[inputUnitIndex])
+            convertedValue = length.converted(to: lengthUnits[outputUnitIndex]).value
         case "liquid":
-            let unitLookupTable = [ UnitVolume.liters, UnitVolume.milliliters, UnitVolume.imperialFluidOunces, UnitVolume.imperialPints ]
-            let liquid = Measurement(value: value, unit: unitLookupTable[inputUnitIndex])
-            convertedValue = liquid.converted(to: unitLookupTable[outputUnitIndex]).value
+            let liquid = Measurement(value: value, unit: liquidUnits[inputUnitIndex])
+            convertedValue = liquid.converted(to: liquidUnits[outputUnitIndex]).value
         default:
             break
         }

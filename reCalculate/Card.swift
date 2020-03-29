@@ -12,13 +12,13 @@ class Card: NSObject {
     var textField: UITextField
     var prefixLable: UILabel
     var infoCard: UIStackView
-    var option: UISwitch
+    var switchOption: UISwitch
     
     override init() {
         self.textField = UITextField()
         self.prefixLable = UILabel()
         self.infoCard = UIStackView()
-        self.option = UISwitch()
+        self.switchOption = UISwitch()
     }
     
     /**
@@ -26,7 +26,7 @@ class Card: NSObject {
     
     - parameter unit: A **String** containg the symbol of a unit
     - parameter unitInex: A **Integer** containg the position of the card getting made.
-    - returns: null
+    - returns: void
     - warning:
     
     # Notes: #
@@ -68,7 +68,7 @@ class Card: NSObject {
     
     - parameter unit: A **object** of **Any** type, containg the unit you want to make an option card for.
     - parameter usersUnits: An **Array** with **AnyObject** with the units that is turend on by the user.
-    - returns: null
+    - returns: void
     - warning:
     
     # Notes: #
@@ -79,7 +79,7 @@ class Card: NSObject {
     makeOptionCard(unitOption, usersUnits)
     ```
     */
-    func makeOptionCard(_ unit: Any, _ usersUnits: [AnyObject]){
+    func makeOptionCard(_ unit: Any, _ usersUnits: [AnyObject], _ unitIndex: Int){
         var unitOption = unit
         var chosenUnits = usersUnits
         if unit is UnitMass{
@@ -97,16 +97,17 @@ class Card: NSObject {
         self.infoCard.alignment = .trailing
         self.infoCard.distribution = .fill
         
-        self.option = UISwitch()
+        self.switchOption = UISwitch()
+        self.switchOption.tag = unitIndex
         for usersUnit in chosenUnits {
             if (unitOption as AnyObject).isEqual(usersUnit){
-                self.option.setOn(true, animated: false)
+                self.switchOption.setOn(true, animated: false)
                 break
             } else {
-                self.option.setOn(false, animated: false)
+                self.switchOption.setOn(false, animated: false)
             }
         }
-        self.infoCard.addArrangedSubview(self.option)
+        self.infoCard.addArrangedSubview(self.switchOption)
         self.prefixLable.text = " " + (unitOption as AnyObject).symbol
         self.prefixLable.textColor = .white
         self.prefixLable.font = UIFont(name: "American Typewriter", size: 20)
