@@ -36,7 +36,7 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="wmE-8v-PKA"/>
                                         </constraints>
-                                        <string key="text">What do you whant to
+                                        <string key="text">What do you want to
 reCalculate?</string>
                                         <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="20"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

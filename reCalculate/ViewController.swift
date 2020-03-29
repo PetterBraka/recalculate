@@ -17,11 +17,14 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var weight: UIButton!
     @IBOutlet weak var infoStack: UIStackView!
     
+    ///predefined **Array** with the different units that will be used for weights.
+    var weightUnits = [ UnitMass.kilograms, UnitMass.stones, UnitMass.pounds, UnitMass.ounces ]
+    ///predefined **Array** with the different units that will be used for lengths.
+    var lengthUnits = [ UnitLength.meters, UnitLength.inches, UnitLength.feet, UnitLength.yards, UnitLength.miles ]
+    ///predefined **Array** with the different units that will be used for liquids.
+    var liquidUnits = [ UnitVolume.liters, UnitVolume.milliliters, UnitVolume.imperialFluidOunces, UnitVolume.imperialPints ]
 
-    let weightUnits = [ UnitMass.kilograms, UnitMass.stones, UnitMass.pounds, UnitMass.ounces ]
-    let lengthUnits = [ UnitLength.meters, UnitLength.inches, UnitLength.feet, UnitLength.yards, UnitLength.miles ]
-    let liquidUnits = [ UnitVolume.liters, UnitVolume.milliliters, UnitVolume.fluidOunces, UnitVolume.pints ]
-    
+    var optionalUnits = [AnyObject]()
     
     
     override func viewDidLoad() {
@@ -73,7 +76,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
      This function will be called when the button named weight gets tapped.
      
      - parameter sender: **UIGestureRecognizer**
-     - returns: **nil**
+     - returns:
      - warning:
      
      */
@@ -83,70 +86,73 @@ class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     /**
-    This function will be called when the weight button gets pressed for a longer time.
-    
-    - parameter sender: **UIGestureRecognizer**
-    - returns: **nil**
-    - warning:
-    
-    */
+     This function will be called when the weight button gets pressed for a longer time.
+     
+     - parameter sender: **UIGestureRecognizer**
+     - returns:
+     - warning:
+     
+     */
     @objc func weightLong(_ sender: UIGestureRecognizer){
+        buttonPressed = "weight"
         if sender.state == .began{
-            print("Long tap")
+            createOptionView(weightUnits)
         }
     }
     
     /**
-    This function will be called when the button named length gets tapped.
-    
-    - parameter sender: **UIGestureRecognizer**
-    - returns: **nil**
-    - warning:
-    
-    */
+     This function will be called when the button named length gets tapped.
+     
+     - parameter sender: **UIGestureRecognizer**
+     - returns:
+     - warning:
+     
+     */
     @objc func lengthTap(_ sender: UIGestureRecognizer){
         buttonPressed = "length"
         createInfoView(lengthUnits)
     }
     
     /**
-    This function will be called when the length button gets pressed for a longer time.
-    
-    - parameter sender: **UIGestureRecognizer**
-    - returns: **nil**
-    - warning:
-    
-    */
+     This function will be called when the length button gets pressed for a longer time.
+     
+     - parameter sender: **UIGestureRecognizer**
+     - returns:
+     - warning:
+     
+     */
     @objc func lengthLong(_ sender: UIGestureRecognizer){
+        buttonPressed = "length"
         if sender.state == .began{
-            print("Long tap")
+            createOptionView(lengthUnits)
         }
     }
     
     /**
-    This function will be called when the button named liquid gets tapped.
-    
-    - parameter sender: **UIGestureRecognizer**
-    - returns: **nil**
-    - warning:
-    
-    */
+     This function will be called when the button named liquid gets tapped.
+     
+     - parameter sender: **UIGestureRecognizer**
+     - returns:
+     - warning:
+     
+     */
     @objc func liquidTap(_ sender: UIGestureRecognizer){
         buttonPressed = "liquid"
         createInfoView(liquidUnits)
     }
     
     /**
-    This function will be called when the liquid button gets pressed for a longer time.
-    
-    - parameter sender: **UIGestureRecognizer**
-    - returns: **nil**
-    - warning:
-    
-    */
+     This function will be called when the liquid button gets pressed for a longer time.
+     
+     - parameter sender: **UIGestureRecognizer**
+     - returns:
+     - warning:
+     
+     */
     @objc func liquidLong(_ sender: UIGestureRecognizer){
+        buttonPressed = "liquid"
         if sender.state == .began{
-            print("Long tap")
+            createOptionView(liquidUnits)
         }
     }
     
@@ -162,9 +168,85 @@ class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     /**
+    This funciton will create infoCards containing a UISwitch and a label. The UISwitch is were the user can turn a unit of or on. The label will show the prefix beside the UISwitch.
+    
+    - parameter units: An **Array** of **AnyObject** with the units that the user tapped on.
+    - returns: null
+    - warning:
+    
+    # Notes: #
+    1. Parameters must be an **Array** containg **UnitMass**, **UnitLength** or **UnitVolume** of the units you want to create a optionCard for
+    
+    # Example #
+    ```
+    createInfoView(units)
+    ```
+    */
+    func createOptionView(_ usersUnits: [AnyObject]) {
+        for view in infoStack.subviews {
+            //cleans the infoStack to make it ready for the new units.
+            view.removeFromSuperview()
+        }
+        switch buttonPressed {
+        case "weight":
+            optionalUnits = [ UnitMass.grams, UnitMass.kilograms, UnitMass.metricTons, UnitMass.stones, UnitMass.pounds, UnitMass.ounces ]
+        case "length":
+            optionalUnits = [ UnitLength.centimeters, UnitLength.meters, UnitLength.kilometers, UnitLength.yards, UnitLength.feet, UnitLength.inches, UnitLength.miles]
+        case "liquid":
+            optionalUnits = [ UnitVolume.milliliters, UnitVolume.liters, UnitVolume.imperialGallons, UnitVolume.imperialPints, UnitVolume.imperialFluidOunces, UnitVolume.imperialTeaspoons, UnitVolume.imperialTablespoons]
+        default:
+            break
+        }
+        var unitTag = 0
+        for unitOption in optionalUnits {
+            let newOptionCard = Card.init()
+            newOptionCard.makeOptionCard(unitOption, usersUnits, unitTag)
+            newOptionCard.switchOption.addTarget(self, action: #selector(switchChanged), for: .valueChanged)
+            infoStack.addArrangedSubview(newOptionCard.infoCard)
+            unitTag += 1
+        }
+    }
+    
+    @objc func switchChanged(mySwitch: UISwitch){
+        switch mySwitch.isOn {
+        case true:
+            print("\(mySwitch.tag) ON")
+            switch buttonPressed {
+            case "weight":
+                var options = optionalUnits as! [UnitMass]
+                weightUnits.append(options.remove(at: mySwitch.tag))
+            case "length":
+                var options = optionalUnits as! [UnitLength]
+                lengthUnits.append(options.remove(at: mySwitch.tag))
+            case "liquid":
+                var options = optionalUnits as! [UnitVolume]
+                liquidUnits.append(options.remove(at: mySwitch.tag))
+            default:
+                break
+            }
+        case false:
+            print("\(mySwitch.tag) OFF")
+            switch buttonPressed {
+            case "weight":
+                var options = optionalUnits as! [UnitMass]
+                weightUnits.remove(at: weightUnits.firstIndex(of: options.remove(at: mySwitch.tag))!)
+                case "length":
+                    var options = optionalUnits as! [UnitLength]
+                    lengthUnits.remove(at: lengthUnits.firstIndex(of: options.remove(at: mySwitch.tag))!)
+                case "liquid":
+                    var options = optionalUnits as! [UnitVolume]
+                    liquidUnits.remove(at: liquidUnits.firstIndex(of: options.remove(at: mySwitch.tag))!)
+            default:
+                break
+            }
+        }
+        
+    }
+    
+    /**
      This funciton will create infoCards containing a textField and a label. The textField is were the user will enter a value. The label will show the prefix beside the textField.
      
-     - parameter units: An array of strings with the units.
+     - parameter units: An **Array** of **Strings** with the units.
      - returns: null
      - warning:
      
@@ -176,27 +258,27 @@ class ViewController: UIViewController, UITextFieldDelegate {
      createInfoView(units)
      ```
      */
-    fileprivate func createInfoView(_ units: [Any]) {
+    func createInfoView(_ units: [Any]) {
         for view in infoStack.subviews {
             //cleans the infoStack to make it ready for the new units.
             view.removeFromSuperview()
         }
         for unit in units {
-            let newInfoCard = InfoCard.init()
+            let newInfoCard = Card.init()
             if unit is UnitMass {
                 let prefix = unit as? UnitMass
                 let unitArray = units as? [UnitMass]
-                newInfoCard.creatInfoCard((prefix?.symbol)!, unitArray!.firstIndex(of: unit as! UnitMass)!)
+                newInfoCard.makeInfoCard((prefix?.symbol)!, unitArray!.firstIndex(of: unit as! UnitMass)!)
             }
             if unit is UnitLength {
                 let prefix = unit as? UnitLength
                 let unitArray = units as? [UnitLength]
-                newInfoCard.creatInfoCard((prefix?.symbol)!, unitArray!.firstIndex(of: unit as! UnitLength)!)
+                newInfoCard.makeInfoCard((prefix?.symbol)!, unitArray!.firstIndex(of: unit as! UnitLength)!)
             }
             if unit is UnitVolume {
                 let prefix = unit as? UnitVolume
                 let unitArray = units as? [UnitVolume]
-                newInfoCard.creatInfoCard((prefix?.symbol)!, unitArray!.firstIndex(of: unit as! UnitVolume)!)
+                newInfoCard.makeInfoCard((prefix?.symbol)!, unitArray!.firstIndex(of: unit as! UnitVolume)!)
             }
             newInfoCard.textField.delegate = self
             let toolBar = UIToolbar()
@@ -219,15 +301,15 @@ class ViewController: UIViewController, UITextFieldDelegate {
         view.endEditing(true)
         handleInput(searchForUpdates())
     }
-
+    
     /**
-    This function will get the hight of the keyboard and move the UI upp so that the keyboard is not covering anything, and it will move the UI down when the keyboard moves down.
-    
-    - parameter notification: will catch any notification happening.
-    - returns: **nil**
-    - warning:
-    
-    */
+     This function will get the hight of the keyboard and move the UI upp so that the keyboard is not covering anything, and it will move the UI down when the keyboard moves down.
+     
+     - parameter notification: will catch any notification happening.
+     - returns: **nil**
+     - warning:
+     
+     */
     @objc func keyboardWillChange(notification: Notification){
         guard let kbHight = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.height else {
             return
@@ -331,17 +413,14 @@ class ViewController: UIViewController, UITextFieldDelegate {
         var convertedValue = Double()
         switch buttonPressed {
         case "weight":
-            let unitLookupTable = [ UnitMass.kilograms, UnitMass.stones, UnitMass.pounds, UnitMass.ounces ]
-            let mass = Measurement(value: value, unit: unitLookupTable[inputUnitIndex])
-            convertedValue = mass.converted(to: unitLookupTable[outputUnitIndex]).value
+            let mass = Measurement(value: value, unit: weightUnits[inputUnitIndex])
+            convertedValue = mass.converted(to: weightUnits[outputUnitIndex]).value
         case "length":
-            let unitLookupTable = [ UnitLength.meters, UnitLength.inches, UnitLength.feet, UnitLength.yards, UnitLength.miles ]
-            let length = Measurement(value: value, unit: unitLookupTable[inputUnitIndex])
-            convertedValue = length.converted(to: unitLookupTable[outputUnitIndex]).value
+            let length = Measurement(value: value, unit: lengthUnits[inputUnitIndex])
+            convertedValue = length.converted(to: lengthUnits[outputUnitIndex]).value
         case "liquid":
-            let unitLookupTable = [ UnitVolume.liters, UnitVolume.milliliters, UnitVolume.fluidOunces, UnitVolume.pints ]
-            let liquid = Measurement(value: value, unit: unitLookupTable[inputUnitIndex])
-            convertedValue = liquid.converted(to: unitLookupTable[outputUnitIndex]).value
+            let liquid = Measurement(value: value, unit: liquidUnits[inputUnitIndex])
+            convertedValue = liquid.converted(to: liquidUnits[outputUnitIndex]).value
         default:
             break
         }
