@@ -20,9 +20,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
     ///predefined **Array** with the different units that will be used for weights.
     var weightUnits = [ UnitMass.kilograms, UnitMass.stones, UnitMass.pounds, UnitMass.ounces ]
     ///predefined **Array** with the different units that will be used for lengths.
-    var lengthUnits = [ UnitLength.meters, UnitLength.inches, UnitLength.feet, UnitLength.yards, UnitLength.miles ]
+    var lengthUnits = [ UnitLength.meters, UnitLength.inches, UnitLength.feet, UnitLength.yards ]
     ///predefined **Array** with the different units that will be used for liquids.
-    var liquidUnits = [ UnitVolume.liters, UnitVolume.milliliters, UnitVolume.imperialFluidOunces, UnitVolume.imperialPints ]
+    var liquidUnits = [ UnitVolume.liters, UnitVolume.imperialFluidOunces, UnitVolume.imperialPints ]
 
     var optionalUnits = [AnyObject]()
     
@@ -191,9 +191,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
         case "weight":
             optionalUnits = [ UnitMass.grams, UnitMass.kilograms, UnitMass.metricTons, UnitMass.stones, UnitMass.pounds, UnitMass.ounces ]
         case "length":
-            optionalUnits = [ UnitLength.centimeters, UnitLength.meters, UnitLength.kilometers, UnitLength.yards, UnitLength.feet, UnitLength.inches, UnitLength.miles]
+            optionalUnits = [ UnitLength.centimeters, UnitLength.meters, UnitLength.kilometers, UnitLength.yards, UnitLength.feet, UnitLength.inches, UnitLength.miles ]
         case "liquid":
-            optionalUnits = [ UnitVolume.milliliters, UnitVolume.liters, UnitVolume.imperialGallons, UnitVolume.imperialPints, UnitVolume.imperialFluidOunces, UnitVolume.imperialTeaspoons, UnitVolume.imperialTablespoons]
+            optionalUnits = [ UnitVolume.milliliters, UnitVolume.liters, UnitVolume.imperialGallons, UnitVolume.imperialPints, UnitVolume.imperialFluidOunces, UnitVolume.imperialTeaspoons, UnitVolume.imperialTablespoons ]
         default:
             break
         }
@@ -210,11 +210,17 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @objc func switchChanged(mySwitch: UISwitch){
         switch mySwitch.isOn {
         case true:
-            print("\(mySwitch.tag) ON")
             switch buttonPressed {
             case "weight":
                 var options = optionalUnits as! [UnitMass]
+                var tempArray = [UnitMass]()
+                while weightUnits.endIndex > mySwitch.tag {
+                    tempArray.append(weightUnits.removeLast())
+                }
                 weightUnits.append(options.remove(at: mySwitch.tag))
+                while !tempArray.isEmpty {
+                    weightUnits.append(tempArray.removeLast())
+                }
             case "length":
                 var options = optionalUnits as! [UnitLength]
                 lengthUnits.append(options.remove(at: mySwitch.tag))
@@ -225,7 +231,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
                 break
             }
         case false:
-            print("\(mySwitch.tag) OFF")
             switch buttonPressed {
             case "weight":
                 var options = optionalUnits as! [UnitMass]
@@ -240,6 +245,10 @@ class ViewController: UIViewController, UITextFieldDelegate {
                 break
             }
         }
+    }
+    
+    func keppArrayOrderd(_ changedSwitch: UISwitch) {
+        
         
     }
     
@@ -434,4 +443,3 @@ class ViewController: UIViewController, UITextFieldDelegate {
         NotificationCenter.default.removeObserver(UIResponder.keyboardWillChangeFrameNotification)
     }
 }
-
