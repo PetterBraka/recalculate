@@ -223,10 +223,24 @@ class ViewController: UIViewController, UITextFieldDelegate {
                 }
             case "length":
                 var options = optionalUnits as! [UnitLength]
+                var tempArray = [UnitLength]()
+                while lengthUnits.endIndex > mySwitch.tag {
+                    tempArray.append(lengthUnits.removeLast())
+                }
                 lengthUnits.append(options.remove(at: mySwitch.tag))
+                while !tempArray.isEmpty {
+                    lengthUnits.append(tempArray.removeLast())
+                }
             case "liquid":
                 var options = optionalUnits as! [UnitVolume]
+                var tempArray = [UnitVolume]()
+                while liquidUnits.endIndex > mySwitch.tag {
+                    tempArray.append(liquidUnits.removeLast())
+                }
                 liquidUnits.append(options.remove(at: mySwitch.tag))
+                while !tempArray.isEmpty {
+                    liquidUnits.append(tempArray.removeLast())
+                }
             default:
                 break
             }
