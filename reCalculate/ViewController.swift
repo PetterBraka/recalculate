@@ -212,35 +212,37 @@ class ViewController: UIViewController, UITextFieldDelegate {
         case true:
             switch buttonPressed {
             case "weight":
-                var options = optionalUnits as! [UnitMass]
-                var tempArray = [UnitMass]()
-                while weightUnits.endIndex > mySwitch.tag {
-                    tempArray.append(weightUnits.removeLast())
+                weightUnits.append(optionalUnits[mySwitch.tag] as! UnitMass)
+                
+                // Create a dictionary to map UnitMass to Int position
+                var position = [UnitMass : Int]()
+                for (unitIndex, unit) in optionalUnits.enumerated() {
+                    position[unit as! UnitMass] = unitIndex
                 }
-                weightUnits.append(options.remove(at: mySwitch.tag))
-                while !tempArray.isEmpty {
-                    weightUnits.append(tempArray.removeLast())
-                }
+                // Sort the array by position.  Use Int.max if the UnitMass has no
+                // position to sort it to the end of the array
+                weightUnits = weightUnits.sorted { position[$0, default: Int.max] < position[$1, default: Int.max] }
+                
             case "length":
-                var options = optionalUnits as! [UnitLength]
-                var tempArray = [UnitLength]()
-                while lengthUnits.endIndex > mySwitch.tag {
-                    tempArray.append(lengthUnits.removeLast())
+                lengthUnits.append(optionalUnits[mySwitch.tag] as! UnitLength)
+                // Create a dictionary to map UnitMass to Int position
+                var position = [UnitLength : Int]()
+                for (unitIndex, unit) in optionalUnits.enumerated() {
+                    position[unit as! UnitLength] = unitIndex
                 }
-                lengthUnits.append(options.remove(at: mySwitch.tag))
-                while !tempArray.isEmpty {
-                    lengthUnits.append(tempArray.removeLast())
-                }
+                // Sort the array by position.  Use Int.max if the UnitMass has no
+                // position to sort it to the end of the array
+                lengthUnits = lengthUnits.sorted { position[$0, default: Int.max] < position[$1, default: Int.max] }
             case "liquid":
-                var options = optionalUnits as! [UnitVolume]
-                var tempArray = [UnitVolume]()
-                while liquidUnits.endIndex > mySwitch.tag {
-                    tempArray.append(liquidUnits.removeLast())
+                liquidUnits.append(optionalUnits[mySwitch.tag] as! UnitVolume)
+                // Create a dictionary to map UnitMass to Int position
+                var position = [UnitVolume : Int]()
+                for (unitIndex, unit) in optionalUnits.enumerated() {
+                    position[unit as! UnitVolume] = unitIndex
                 }
-                liquidUnits.append(options.remove(at: mySwitch.tag))
-                while !tempArray.isEmpty {
-                    liquidUnits.append(tempArray.removeLast())
-                }
+                // Sort the array by position.  Use Int.max if the UnitMass has no
+                // position to sort it to the end of the array
+                liquidUnits = liquidUnits.sorted { position[$0, default: Int.max] < position[$1, default: Int.max] }
             default:
                 break
             }
