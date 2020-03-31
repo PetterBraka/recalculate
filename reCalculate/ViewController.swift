@@ -20,9 +20,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
     ///predefined **Array** with the different units that will be used for weights.
     var weightUnits = [ UnitMass.kilograms, UnitMass.stones, UnitMass.pounds, UnitMass.ounces ]
     ///predefined **Array** with the different units that will be used for lengths.
-    var lengthUnits = [ UnitLength.meters, UnitLength.inches, UnitLength.feet, UnitLength.yards, UnitLength.miles ]
+    var lengthUnits = [ UnitLength.meters, UnitLength.inches, UnitLength.feet, UnitLength.yards ]
     ///predefined **Array** with the different units that will be used for liquids.
-    var liquidUnits = [ UnitVolume.liters, UnitVolume.milliliters, UnitVolume.imperialFluidOunces, UnitVolume.imperialPints ]
+    var liquidUnits = [ UnitVolume.liters, UnitVolume.imperialFluidOunces, UnitVolume.imperialPints ]
 
     var optionalUnits = [AnyObject]()
     
@@ -191,9 +191,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
         case "weight":
             optionalUnits = [ UnitMass.grams, UnitMass.kilograms, UnitMass.metricTons, UnitMass.stones, UnitMass.pounds, UnitMass.ounces ]
         case "length":
-            optionalUnits = [ UnitLength.centimeters, UnitLength.meters, UnitLength.kilometers, UnitLength.yards, UnitLength.feet, UnitLength.inches, UnitLength.miles]
+            optionalUnits = [ UnitLength.centimeters, UnitLength.meters, UnitLength.kilometers, UnitLength.yards, UnitLength.feet, UnitLength.inches, UnitLength.miles ]
         case "liquid":
-            optionalUnits = [ UnitVolume.milliliters, UnitVolume.liters, UnitVolume.imperialGallons, UnitVolume.imperialPints, UnitVolume.imperialFluidOunces, UnitVolume.imperialTeaspoons, UnitVolume.imperialTablespoons]
+            optionalUnits = [ UnitVolume.milliliters, UnitVolume.liters, UnitVolume.imperialGallons, UnitVolume.imperialPints, UnitVolume.imperialFluidOunces, UnitVolume.imperialTeaspoons, UnitVolume.imperialTablespoons ]
         default:
             break
         }
@@ -210,22 +210,43 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @objc func switchChanged(mySwitch: UISwitch){
         switch mySwitch.isOn {
         case true:
-            print("\(mySwitch.tag) ON")
             switch buttonPressed {
             case "weight":
-                var options = optionalUnits as! [UnitMass]
-                weightUnits.append(options.remove(at: mySwitch.tag))
+                weightUnits.append(optionalUnits[mySwitch.tag] as! UnitMass)
+                
+                // Create a dictionary to map UnitMass to Int position
+                var position = [UnitMass : Int]()
+                for (unitIndex, unit) in optionalUnits.enumerated() {
+                    position[unit as! UnitMass] = unitIndex
+                }
+                // Sort the array by position.  Use Int.max if the UnitMass has no
+                // position to sort it to the end of the array
+                weightUnits = weightUnits.sorted { position[$0, default: Int.max] < position[$1, default: Int.max] }
+                
             case "length":
-                var options = optionalUnits as! [UnitLength]
-                lengthUnits.append(options.remove(at: mySwitch.tag))
+                lengthUnits.append(optionalUnits[mySwitch.tag] as! UnitLength)
+                // Create a dictionary to map UnitMass to Int position
+                var position = [UnitLength : Int]()
+                for (unitIndex, unit) in optionalUnits.enumerated() {
+                    position[unit as! UnitLength] = unitIndex
+                }
+                // Sort the array by position.  Use Int.max if the UnitMass has no
+                // position to sort it to the end of the array
+                lengthUnits = lengthUnits.sorted { position[$0, default: Int.max] < position[$1, default: Int.max] }
             case "liquid":
-                var options = optionalUnits as! [UnitVolume]
-                liquidUnits.append(options.remove(at: mySwitch.tag))
+                liquidUnits.append(optionalUnits[mySwitch.tag] as! UnitVolume)
+                // Create a dictionary to map UnitMass to Int position
+                var position = [UnitVolume : Int]()
+                for (unitIndex, unit) in optionalUnits.enumerated() {
+                    position[unit as! UnitVolume] = unitIndex
+                }
+                // Sort the array by position.  Use Int.max if the UnitMass has no
+                // position to sort it to the end of the array
+                liquidUnits = liquidUnits.sorted { position[$0, default: Int.max] < position[$1, default: Int.max] }
             default:
                 break
             }
         case false:
-            print("\(mySwitch.tag) OFF")
             switch buttonPressed {
             case "weight":
                 var options = optionalUnits as! [UnitMass]
@@ -240,6 +261,10 @@ class ViewController: UIViewController, UITextFieldDelegate {
                 break
             }
         }
+    }
+    
+    func keppArrayOrderd(_ changedSwitch: UISwitch) {
+        
         
     }
     
@@ -434,4 +459,3 @@ class ViewController: UIViewController, UITextFieldDelegate {
         NotificationCenter.default.removeObserver(UIResponder.keyboardWillChangeFrameNotification)
     }
 }
-
