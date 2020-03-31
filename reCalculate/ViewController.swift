@@ -16,6 +16,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var length: UIButton!
     @IBOutlet weak var weight: UIButton!
     @IBOutlet weak var infoStack: UIStackView!
+    @IBOutlet weak var scrollView: UIScrollView!
     
     ///predefined **Array** with the different units that will be used for weights.
     var weightUnits = [ UnitMass.kilograms, UnitMass.stones, UnitMass.pounds, UnitMass.ounces ]
@@ -29,6 +30,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         //Setting upp each button to look like a rounded button with an gray outline.
         weight.backgroundColor = .clear
         weight.layer.cornerRadius = 20
@@ -205,6 +207,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
             infoStack.addArrangedSubview(newOptionCard.infoCard)
             unitTag += 1
         }
+        scrollView.contentSize = infoStack.frame.size
     }
     
     @objc func switchChanged(mySwitch: UISwitch){
@@ -263,10 +266,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func keppArrayOrderd(_ changedSwitch: UISwitch) {
-        
-        
-    }
     
     /**
      This funciton will create infoCards containing a textField and a label. The textField is were the user will enter a value. The label will show the prefix beside the textField.
@@ -314,6 +313,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
             newInfoCard.textField.inputAccessoryView = toolBar
             infoStack.addArrangedSubview(newInfoCard.infoCard)
         }
+        scrollView.contentSize = infoStack.frame.size
     }
     
     /**
