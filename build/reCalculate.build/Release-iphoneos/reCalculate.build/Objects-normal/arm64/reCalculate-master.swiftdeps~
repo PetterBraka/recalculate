@@ -1,8 +1,0 @@
-version: "Apple Swift version 5.1.3 (swiftlang-1100.0.282.1 clang-1100.0.33.15)"
-options: "7367830ec0bc9cadc86ea800489938bb"
-build_time: [1585495151, 748254000]
-inputs:
-  "/Users/pettervangbrakalsvalet/Desktop/Projects/Beginning /reCalculate/reCalculate/ViewController.swift": [9223372036, 854775807]
-  "/Users/pettervangbrakalsvalet/Desktop/Projects/Beginning /reCalculate/reCalculate/AppDelegate.swift": [9223372036, 854775807]
-  "/Users/pettervangbrakalsvalet/Desktop/Projects/Beginning /reCalculate/reCalculate/SceneDelegate.swift": [9223372036, 854775807]
-  "/Users/pettervangbrakalsvalet/Desktop/Projects/Beginning /reCalculate/reCalculate/InfoCard.swift": [9223372036, 854775807]
