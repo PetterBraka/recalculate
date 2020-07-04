@@ -1,0 +1,8 @@
+version: "Apple Swift version 5.2 (swiftlang-1103.0.32.1 clang-1103.0.32.29)"
+options: "7a3786283cb857b9164bedada340b30f"
+build_time: [1586884152, 884959000]
+inputs:
+  "/Users/pettervangbrakalsvalet/Desktop/Projects/Beginning /reCalculate/reCalculate/ViewController.swift": [9223372036, 854775807]
+  "/Users/pettervangbrakalsvalet/Desktop/Projects/Beginning /reCalculate/reCalculate/AppDelegate.swift": [9223372036, 854775807]
+  "/Users/pettervangbrakalsvalet/Desktop/Projects/Beginning /reCalculate/reCalculate/SceneDelegate.swift": [9223372036, 854775807]
+  "/Users/pettervangbrakalsvalet/Desktop/Projects/Beginning /reCalculate/reCalculate/Card.swift": [9223372036, 854775807]
