@@ -29,6 +29,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             self.window = window
             window.makeKeyAndVisible()
         }
+        UITableView.appearance().backgroundColor = UIColor().hexStringToUIColor("212121")
+        UITableViewCell.appearance().backgroundColor = UIColor().hexStringToUIColor("212121")
+        
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

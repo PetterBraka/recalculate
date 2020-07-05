@@ -8,7 +8,18 @@
 
 import SwiftUI
 
+let weightUnits: [UnitMass] = [.milligrams, .centigrams, .decigrams, .kilograms,
+                                .metricTons, .ounces, .pounds, .stones]
+let lengthUnits: [UnitLength] = [.centimeters, .decameters, .meters, .kilometers, .scandinavianMiles,
+                                 .inches, .feet, .yards, .fathoms, .miles, .nauticalMiles, .lightyears]
+let liquidUnits: [UnitVolume] = [.milliliters, .centiliters, .deciliters, .liters,
+                                 .gallons, .pints, .fluidOunces, .teaspoons, .tablespoons]
+
+var units : [Unit] = []
+
 struct ContentView: View {
+    @State var input: String = ""
+    @State var refresh: Bool = false
     
     var body: some View {
         ZStack{
@@ -71,15 +82,44 @@ struct ContentView: View {
                     }
                     Spacer()
                 }
-                Spacer()
+                    List(units, id: \.self) { unit in
+                        HStack(){
+                            TextField("Enter value", text: self.$input, onEditingChanged: { (changed) in
+                                print("Entered: \(changed)")
+                            })
+                                .padding(.all, 5)
+                                .frame(width: 120, height: 40, alignment: .center)
+                                .foregroundColor(Color(UIColor.lightGray))
+                                .background(Color(UIColor.gray))
+                                .cornerRadius(10)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(Color(UIColor.lightGray), lineWidth: 2)
+                            )
+                            Text("\(unit.symbol)")
+                                .foregroundColor(.white)
+                                .font(.custom("American Typewriter", size: 20))
+                            
+                        }
+                    }
                     .frame(minHeight: 30, maxHeight: .infinity)
-            }
+                }
         }
     }
 }
 
 func taped(_ buttonTaped: String){
     print("\(buttonTaped) Button tapped!")
+    switch buttonTaped {
+        case "Weight":
+            units = weightUnits
+        case "Lenght":
+            units = lengthUnits
+        case "Liquid":
+            units = liquidUnits
+        default:
+            units = []
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {
