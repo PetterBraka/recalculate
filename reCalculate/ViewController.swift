@@ -18,12 +18,14 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var infoStack: UIStackView!
     @IBOutlet weak var scrollView: UIScrollView!
     
-    ///predefined **Array** with the different units that will be used for weights.
-    var weightUnits = [ UnitMass.kilograms, UnitMass.stones, UnitMass.pounds, UnitMass.ounces ]
-    ///predefined **Array** with the different units that will be used for lengths.
-    var lengthUnits = [ UnitLength.meters, UnitLength.inches, UnitLength.feet, UnitLength.yards ]
-    ///predefined **Array** with the different units that will be used for liquids.
-    var liquidUnits = [ UnitVolume.liters, UnitVolume.imperialFluidOunces, UnitVolume.imperialPints ]
+    let defaults = UserDefaults.standard
+    let weightArrayString = "weightArray"
+    let lengthArrayString = "lengthArray"
+    let liquidArrayString = "liquidArray"
+    
+    var weightUnits: [UnitMass] = []
+    var lengthUnits: [UnitLength] = []
+    var liquidUnits: [UnitVolume] = []
 
     var optionalUnits = [AnyObject]()
     
@@ -31,6 +33,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        loadOptions()
         //Setting upp each button to look like a rounded button with an gray outline.
         weight.backgroundColor = .clear
         weight.layer.cornerRadius = 20
@@ -40,7 +43,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         let weigthTapGesture = UITapGestureRecognizer(target: self, action: #selector(weightTap))
         weight.addGestureRecognizer(weigthTapGesture)
         let weightLongGesture = UILongPressGestureRecognizer(target: self, action: #selector(weightLong))
-        weightLongGesture.minimumPressDuration = 1
+        weightLongGesture.minimumPressDuration = 0.2
         weight.addGestureRecognizer(weightLongGesture)
         
         //Setting upp each button to look like a rounded button with an gray outline.
@@ -52,7 +55,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         let lengthTapGesture = UITapGestureRecognizer(target: self, action: #selector(lengthTap))
         length.addGestureRecognizer(lengthTapGesture)
         let lengthLongGesture = UILongPressGestureRecognizer(target: self, action: #selector(lengthLong))
-        lengthLongGesture.minimumPressDuration = 1
+        lengthLongGesture.minimumPressDuration = 0.2
         length.addGestureRecognizer(lengthLongGesture)
         
         //Setting upp each button to look like a rounded button with an gray outline.
@@ -64,7 +67,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         let liquidTapGesture = UITapGestureRecognizer(target: self, action: #selector(liquidTap))
         liquid.addGestureRecognizer(liquidTapGesture)
         let liquidLongGesture = UILongPressGestureRecognizer(target: self, action: #selector(liquidLong))
-        liquidLongGesture.minimumPressDuration = 1
+        liquidLongGesture.minimumPressDuration = 0.2
         liquid.addGestureRecognizer(liquidLongGesture)
         
         //Starts to listen for the keyboard to changes.
@@ -72,6 +75,92 @@ class ViewController: UIViewController, UITextFieldDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         
+    }
+    
+    func loadOptions(){
+        guard let weightsLoaded = defaults.array(forKey: weightArrayString) as? [String],
+              let lengthsLoaded = defaults.array(forKey: lengthArrayString) as? [String],
+              let liquidsLoaded = defaults.array(forKey: liquidArrayString) as? [String] else {
+            weightUnits = [UnitMass.kilograms, UnitMass.stones, UnitMass.pounds, UnitMass.ounces]
+            lengthUnits = [UnitLength.meters, UnitLength.inches, UnitLength.feet, UnitLength.yards]
+            liquidUnits = [UnitVolume.liters, UnitVolume.imperialFluidOunces, UnitVolume.imperialPints]
+            return
+        }
+        weightUnits.removeAll()
+        weightsLoaded.forEach { (unit) in
+            switch unit.lowercased(){
+            case UnitMass.grams.symbol.lowercased():
+                weightUnits.append(.grams)
+            case UnitMass.kilograms.symbol.lowercased():
+                weightUnits.append(.kilograms)
+            case UnitMass.metricTons.symbol.lowercased():
+                weightUnits.append(.metricTons)
+            case UnitMass.stones.symbol.lowercased():
+                weightUnits.append(.stones)
+            case UnitMass.pounds.symbol.lowercased():
+                weightUnits.append(.pounds)
+            case UnitMass.ounces.symbol.lowercased():
+                weightUnits.append(.ounces)
+            default:
+                break
+            }
+        }
+        lengthUnits.removeAll()
+        lengthsLoaded.forEach { (unit) in
+            switch unit.lowercased(){
+            case UnitLength.centimeters.symbol.lowercased():
+                lengthUnits.append(.centimeters)
+            case UnitLength.meters.symbol.lowercased():
+                lengthUnits.append(.meters)
+            case UnitLength.kilometers.symbol.lowercased():
+                lengthUnits.append(.kilometers)
+            case UnitLength.yards.symbol.lowercased():
+                lengthUnits.append(.yards)
+            case UnitLength.feet.symbol.lowercased():
+                lengthUnits.append(.feet)
+            case UnitLength.inches.symbol.lowercased():
+                lengthUnits.append(.inches)
+            case UnitLength.miles.symbol.lowercased():
+                lengthUnits.append(.miles)
+            default:
+            break
+            }
+        }
+        liquidUnits.removeAll()
+        liquidsLoaded.forEach { (unit) in
+            switch unit.lowercased(){
+            case UnitVolume.milliliters.symbol.lowercased():
+                liquidUnits.append(UnitVolume.milliliters)
+            case UnitVolume.liters.symbol.lowercased():
+                liquidUnits.append(UnitVolume.liters)
+            case UnitVolume.imperialGallons.symbol.lowercased():
+                liquidUnits.append(UnitVolume.imperialGallons)
+            case UnitVolume.imperialPints.symbol.lowercased():
+                liquidUnits.append(UnitVolume.imperialPints)
+            case UnitVolume.imperialFluidOunces.symbol.lowercased():
+                liquidUnits.append(UnitVolume.imperialFluidOunces)
+            case UnitVolume.imperialTeaspoons.symbol.lowercased():
+                liquidUnits.append(UnitVolume.imperialTeaspoons)
+            case UnitVolume.imperialTablespoons.symbol.lowercased():
+                liquidUnits.append(UnitVolume.imperialTablespoons)
+            default:
+                break
+            }
+        }
+    }
+    
+    func saveOptions(){
+        var weightsSaved: [String] = []
+        var lengthsSaved: [String] = []
+        var liquidsSaved: [String] = []
+        
+        weightUnits.forEach({weightsSaved.append($0.symbol)})
+        lengthUnits.forEach({lengthsSaved.append($0.symbol)})
+        liquidUnits.forEach({liquidsSaved.append($0.symbol)})
+        
+        defaults.set(weightsSaved, forKey: weightArrayString)
+        defaults.set(lengthsSaved, forKey: lengthArrayString)
+        defaults.set(liquidsSaved, forKey: liquidArrayString)
     }
     
     /**
@@ -264,6 +353,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
                 break
             }
         }
+        saveOptions()
     }
     
     

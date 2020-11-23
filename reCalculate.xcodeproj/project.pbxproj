@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3355A1C225666058000A3146 /* SettingsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3355A1C125666058000A3146 /* SettingsCard.swift */; };
+		3355A1C52566606B000A3146 /* ConvertionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3355A1C42566606B000A3146 /* ConvertionCard.swift */; };
 		33BF5796242E7DC10036FA6F /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BF5795242E7DC10036FA6F /* Card.swift */; };
 		33F1993E2427EFA200F9A2E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F1993D2427EFA200F9A2E6 /* AppDelegate.swift */; };
 		33F199402427EFA200F9A2E6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F1993F2427EFA200F9A2E6 /* SceneDelegate.swift */; };
@@ -17,6 +19,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3355A1C125666058000A3146 /* SettingsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCard.swift; sourceTree = "<group>"; };
+		3355A1C42566606B000A3146 /* ConvertionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvertionCard.swift; sourceTree = "<group>"; };
 		33BF5795242E7DC10036FA6F /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		33F1993A2427EFA200F9A2E6 /* reCalculate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = reCalculate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		33F1993D2427EFA200F9A2E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -62,6 +66,8 @@
 				33F1993F2427EFA200F9A2E6 /* SceneDelegate.swift */,
 				33F199412427EFA200F9A2E6 /* ViewController.swift */,
 				33BF5795242E7DC10036FA6F /* Card.swift */,
+				3355A1C125666058000A3146 /* SettingsCard.swift */,
+				3355A1C42566606B000A3146 /* ConvertionCard.swift */,
 				33F199432427EFA200F9A2E6 /* Main.storyboard */,
 				33F199462427EFA400F9A2E6 /* Assets.xcassets */,
 				33F199482427EFA400F9A2E6 /* LaunchScreen.storyboard */,
@@ -97,7 +103,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1130;
-				LastUpgradeCheck = 1130;
+				LastUpgradeCheck = 1220;
 				ORGANIZATIONNAME = "Petter vang Brakalsvålet";
 				TargetAttributes = {
 					33F199392427EFA200F9A2E6 = {
@@ -141,7 +147,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3355A1C225666058000A3146 /* SettingsCard.swift in Sources */,
 				33F199422427EFA200F9A2E6 /* ViewController.swift in Sources */,
+				3355A1C52566606B000A3146 /* ConvertionCard.swift in Sources */,
 				33F1993E2427EFA200F9A2E6 /* AppDelegate.swift in Sources */,
 				33F199402427EFA200F9A2E6 /* SceneDelegate.swift in Sources */,
 				33BF5796242E7DC10036FA6F /* Card.swift in Sources */,
@@ -196,6 +204,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -257,6 +266,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
